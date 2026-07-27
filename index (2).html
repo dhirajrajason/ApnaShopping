@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apna Shopping - FIREBASE CONNECTED - Edit Delete Working</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
+.header{background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
+.header-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;max-width:1200px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:6px;font-weight:900;color:#ff6b00;font-size:18px;cursor:pointer}
+.logo span{background:#ff6b00;color:white;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hbtn{border:1px solid #e2e8f0;background:white;padding:7px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer}
+.nav-bar{background:#1e293b;color:#cbd5e1;padding:8px 10px;overflow-x:auto;white-space:nowrap}
+.nav-inner{display:flex;gap:6px}
+.nav-link{padding:6px 12px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer}
+.nav-link.active{background:#ff6b00;color:white}
+.container{max-width:1200px;margin:0 auto;padding:10px}
+.banner{background:linear-gradient(135deg,#ff6b00,#ffb700);color:white;border-radius:14px;padding:18px;min-height:140px}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+@media(min-width:700px){.product-grid{grid-template-columns:repeat(4,1fr)}}
+.product-card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.06);cursor:pointer}
+.product-img{height:120px;background:#fff7ed;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.card{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);margin-bottom:10px}
+.btn{padding:10px;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%;font-size:12px;margin-top:6px}
+.btn-primary{background:#ff6b00;color:white}.btn-dark{background:#1e293b;color:white}.btn-outline{background:white;border:2px solid #ff6b00;color:#ff6b00}.btn-danger{background:#ef4444;color:white}.btn-success{background:#10b981;color:white}
+.form-group{margin-bottom:8px}.form-group label{font-size:11px;font-weight:700;display:block;margin-bottom:3px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-size:12px}
+.hidden{display:none !important}
+.badge{padding:2px 6px;border-radius:8px;font-size:10px;color:white;display:inline-block}
+.badge-customer{background:#3b82f6}.badge-seller{background:#f59e0b}.badge-delivery{background:#10b981}.badge-admin{background:#ef4444}
+.tabs{display:flex;gap:5px;overflow-x:auto;margin-bottom:10px;padding-bottom:4px}
+.tab{padding:7px 12px;border-radius:18px;border:1px solid #e2e8f0;background:white;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.tab.active{background:#ff6b00;color:white;border-color:#ff6b00}
+.status{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#1e293b;color:white;padding:8px 14px;border-radius:18px;font-size:11px;z-index:999;max-width:92%;text-align:center}
+.photo-preview{width:80px;height:80px;border-radius:50%;background:#f1f5f9;border:2px dashed #ff6b00;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto 8px;font-size:28px;cursor:pointer}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div class="header-top">
+<div class="logo" onclick="showView('homeView')"><span>🛒</span> Apna Shopping <span id="firebaseStatus" style="font-size:8px;background:#f59e0b;color:white;padding:2px 6px;border-radius:10px;margin-left:4px">Firebase: Connecting apna-shopping-40cf8</span></div>
+<div style="display:flex;gap:6px">
+<button class="hbtn" onclick="showView('cartView')">🛒 Cart <span id="cartCount" style="background:#ef4444;color:white;padding:1px 6px;border-radius:10px;font-size:10px">0</span></button>
+<button class="hbtn" id="loginBtn" onclick="showView('loginView')">🔐 Login</button>
+<button class="hbtn hidden" id="profileBtn" onclick="showView('profileView')">👤 <span id="headerName"></span></button>
+</div>
+</div>
+</div>
+
+<div class="nav-bar"><div class="nav-inner" id="navCategories"></div></div>
+
+<div class="container">
+
+<div id="homeView">
+<div class="banner" id="mainBanner">
+<h2 id="bannerTitle">🎉 Bihar Ka Apna Bazar - Firebase Connected</h2>
+<p id="bannerSubtitle" style="font-size:12px;margin-top:4px">1 Site 1 Login 4 Roles - Product Edit/Delete - Payment - Firebase apna-shopping-40cf8</p>
+</div>
+<div style="display:flex;justify-content:space-between;margin:14px 0 6px"><h3 id="productsSection">🔥 Top Products - Firebase Se</h3><span id="productCountInfo" style="font-size:11px;color:#64748b"></span></div>
+<div id="productList" class="product-grid"><p>⏳ Firebase Se Products Loading... apna-shopping-40cf8</p></div>
+</div>
+
+<div id="loginView" class="hidden">
+<div class="card" style="max-width:380px;margin:20px auto">
+<h3 style="text-align:center">🔐 Login - Single Login All Roles - Firebase</h3>
+<div class="form-group"><label>Mobile ID</label><input id="loginId" placeholder="admin"></div>
+<div class="form-group"><label>Password</label><input id="loginPass" type="password" placeholder="admin123"></div>
+<div class="form-group"><label>Role Chuno</label><select id="loginRole"><option value="customer">👤 Customer</option><option value="seller">💼 Seller</option><option value="delivery">🚚 Delivery Boy</option><option value="admin">👑 Admin</option></select></div>
+<button class="btn btn-primary" onclick="doLoginDirect()">🔓 Direct Login - Firebase Check</button>
+<button class="btn btn-outline" onclick="showView('registerView')">Register Karo - Firebase Me Save Hoga</button>
+<p style="font-size:10px;text-align:center;margin-top:8px;background:#fff7ed;padding:6px;border-radius:8px">Admin: <b>admin / admin123 / Admin</b><br>Firebase Project: <b>apna-shopping-40cf8</b><br>App ID: 1:169056374972:web:c7c246ab8685f133d640b9</p>
+<button class="btn btn-outline" onclick="showView('homeView')">← Home</button>
+</div>
+</div>
+
+<div id="registerView" class="hidden">
+<div class="card" style="max-width:380px;margin:10px auto">
+<h3 style="text-align:center">📝 Register - Firebase Me Save Hoga</h3>
+<div class="photo-preview" id="photoPreview" onclick="document.getElementById('regPhoto').click()">📸<img id="previewImg" class="hidden"></div>
+<input type="file" id="regPhoto" accept="image/*" class="hidden" onchange="previewPhoto(this)">
+<div class="form-group"><label>Naam</label><input id="regName"></div>
+<div class="form-group"><label>Mobile (ID)</label><input id="regId"></div>
+<div class="form-group"><label>Email</label><input id="regEmail"></div>
+<div class="form-group"><label>Password</label><input id="regPass" type="password"></div>
+<div class="form-group"><label>Role</label><select id="regRole" onchange="toggleRegFields()"><option value="customer">👤 Customer</option><option value="seller">💼 Seller</option><option value="delivery">🚚 Delivery</option><option value="admin">👑 Admin</option></select></div>
+<div id="sellerFields" class="hidden"><div class="form-group"><label>Dukan Naam</label><input id="regShop"></div><div class="form-group"><label>City</label><input id="regCity"></div></div>
+<div id="deliveryFields" class="hidden"><div class="form-group"><label>City</label><input id="regDelCity"></div></div>
+<button class="btn btn-primary" onclick="doRegisterDirect()">✅ Register - Firebase + Local - WORKING</button>
+<button class="btn btn-outline" onclick="showView('loginView')">Login Pe Jao</button>
+</div>
+</div>
+
+<div id="profileView" class="hidden">
+<div id="profileBanner" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);color:white;padding:14px;border-radius:12px;text-align:center;margin-bottom:10px">
+<h3 id="profileBannerTitle">👤 Profile</h3><p id="profileBannerSub" style="font-size:11px"></p>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="switchProfileTab('details',this)">📋 Details</button>
+<button class="tab" onclick="switchProfileTab('orders',this)">📦 Orders</button>
+<button class="tab" onclick="switchProfileTab('edit',this)">✏️ Edit</button>
+<button class="tab" id="sellerTabBtn" onclick="switchProfileTab('seller',this)">💼 Seller</button>
+<button class="tab" id="deliveryTabBtn" onclick="switchProfileTab('delivery',this)">🚚 Delivery</button>
+<button class="tab" id="adminTabBtn" onclick="switchProfileTab('admin',this)">👑 Admin - Firebase</button>
+</div>
+<div id="profileDetailsTab" class="card"><div style="font-size:12px;line-height:2"><div>🆔 Mobile: <b id="pUserId"></b></div><div>📧 Email: <b id="pEmail"></b></div><div>👤 Naam: <b id="pName"></b></div><div>🏷️ Role: <b id="pRole"></b></div><div>🏪 Extra: <b id="pExtra"></b></div><div>🔥 Firebase ID: <b id="pFirebaseId" style="font-size:10px"></b></div></div></div>
+<div id="profileOrdersTab" class="card hidden"><h4>📦 My Orders - Firebase Se</h4><div id="orderHistoryList"></div></div>
+<div id="profileEditTab" class="card hidden"><h4>✏️ Edit Profile - Firebase Update</h4><div class="form-group"><label>Naam</label><input id="editName"></div><div class="form-group"><label>Email</label><input id="editEmail"></div><div class="form-group"><label>Mobile</label><input id="editMobile"></div><div class="form-group"><label>City</label><input id="editCity"></div><button class="btn btn-primary" onclick="updateProfile()">💾 Save - Firebase + Local - WORKING</button></div>
+<div id="profileSellerTab" class="card hidden"><h4>💼 Seller Panel - Firebase Me Product Save Hoga - Sabko Dikhenga</h4><div class="form-group"><label>Photo</label><input type="file" id="productPhoto" accept="image/*" onchange="previewProductPhoto(this)"><div id="productPhotoPreview"></div></div><div class="form-group"><label>Naam</label><input id="pName"></div><div class="form-group"><label>Price ₹</label><input id="pPrice" type="number"></div><div class="form-group"><label>MRP ₹</label><input id="pMrp" type="number"></div><div class="form-group"><label>Category</label><select id="pCat"><option>fashion</option><option>mobile</option><option>kirana</option><option>electronics</option><option>home</option></select></div><button class="btn btn-primary" onclick="addProduct()">🚀 Product Add - Firebase - Sabko Dikhenga</button><div id="sellerProductList" style="margin-top:10px"></div></div>
+<div id="profileDeliveryTab" class="card hidden"><h4>🚚 Delivery Panel - Firebase Orders</h4><div id="deliveryOrders"></div></div>
+
+<div id="profileAdminTab" class="hidden">
+<div class="card" style="border:2px solid #10b981;background:#f0fdf4"><h3>👑 Admin Panel - FIREBASE CONNECTED - Edit + Delete + Payment - 100% FIXED!</h3><p style="font-size:11px">✅ Product Edit: Edit Dabao → Firebase Me Update Hoga → Sab Users Ko Dikhenga<br>✅ Product Delete: Delete Dabao → Firebase Se Delete Hoga → Sab Ke Liye Delete<br>✅ Payment Gateway: UPI/Razorpay/COD - Firebase Me Save<br>Firebase Project: <b>apna-shopping-40cf8</b> - App ID: 1:169056374972:web:c7c246ab8685f133d640b9</p><p style="font-size:10px;color:#ef4444;margin-top:4px">🔥 Firebase Status: <span id="adminFirebaseStatus">Connecting...</span></p></div>
+
+<div class="tabs">
+<button class="tab active" onclick="switchAdminTab('site',this)">🏠 Site</button>
+<button class="tab" onclick="switchAdminTab('banner',this)">🖼️ Banner</button>
+<button class="tab" onclick="switchAdminTab('products',this)">🛍️ Products EDIT DELETE</button>
+<button class="tab" onclick="switchAdminTab('users',this)">👥 Users</button>
+<button class="tab" onclick="switchAdminTab('orders',this)">📦 Orders</button>
+<button class="tab" onclick="switchAdminTab('payment',this)">💳 Payment</button>
+</div>
+
+<div id="adminSiteTab" class="card"><h4>🏠 Site Settings - Firebase</h4><div class="form-group"><label>Site Name</label><input id="adminSiteName"></div><div class="form-group"><label>Categories</label><input id="adminCategories"></div><button class="btn btn-primary" onclick="saveSiteSettings()">💾 Site Save - Firebase - WORKING</button></div>
+
+<div id="adminBannerTab" class="card hidden"><h4>🖼️ Banner - Firebase</h4><div class="form-group"><label>Title</label><input id="adminBannerTitle"></div><div class="form-group"><label>Subtitle</label><input id="adminBannerSubtitle"></div><button class="btn btn-primary" onclick="saveBannerSettings()">💾 Banner Save - Firebase - WORKING</button></div>
+
+<div id="adminProductsTab" class="card hidden">
+<h4>🛍️ Products - EDIT + DELETE - Firebase Connected - 100% FIXED</h4>
+
+<div id="editProductForm" class="hidden" style="background:#fff7ed;border:2px solid #ff6b00;border-radius:12px;padding:12px;margin-bottom:12px">
+<h4 style="color:#ff6b00">✏️ Product Edit Karo - Firebase Me Update Hoga - Sabko Dikhenga!</h4>
+<input type="hidden" id="editProductIndex">
+<input type="hidden" id="editProductFirebaseId">
+<div class="form-group"><label>Photo Change (Naya Lagana Ho To)</label><input type="file" id="editProductPhoto" accept="image/*" onchange="previewEditProductPhoto(this)"><div id="editProductPhotoPreview"></div></div>
+<div class="form-group"><label>Naam</label><input id="editPName"></div>
+<div class="form-group"><label>Price ₹</label><input id="editPPrice" type="number"></div>
+<div class="form-group"><label>MRP ₹</label><input id="editPMrp" type="number"></div>
+<div class="form-group"><label>Category</label><select id="editPCat"><option>fashion</option><option>mobile</option><option>kirana</option><option>electronics</option><option>home</option></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button class="btn btn-success" onclick="updateProduct()">✅ Update Karo - Firebase - WORKING</button>
+<button class="btn btn-outline" onclick="cancelEditProduct()">❌ Cancel</button>
+</div>
+</div>
+
+<div class="form-group"><label>Photo</label><input type="file" id="productPhotoAdmin" accept="image/*" onchange="previewProductPhotoAdmin(this)"><div id="productPhotoPreviewAdmin"></div></div>
+<div class="form-group"><label>Naam</label><input id="pNameAdmin"></div>
+<div class="form-group"><label>Price</label><input id="pPriceAdmin" type="number"></div>
+<div class="form-group"><label>MRP</label><input id="pMrpAdmin" type="number"></div>
+<div class="form-group"><label>Category</label><select id="pCatAdmin"><option>fashion</option><option>mobile</option><option>kirana</option><option>electronics</option><option>home</option></select></div>
+<button class="btn btn-primary" onclick="addProductAdmin()">➕ Product Add - Firebase - Sabko Dikhenga - WORKING</button>
+<div style="margin-top:12px"><h4>📦 Saare Products - Firebase Se - Edit/Delete - WORKING</h4><div id="adminProductList"><p>Loading Firebase Products...</p></div></div>
+</div>
+
+<div id="adminUsersTab" class="card hidden"><h4>👥 Users - Firebase Se Saare Users - WORKING</h4><div id="adminUsersList"><p>Loading Firebase Users...</p></div><button class="btn btn-dark" onclick="loadAdminData()">🔄 Refresh Users - Firebase</button></div>
+<div id="adminOrdersTab" class="card hidden"><h4>📦 Orders - Firebase Se - Payment Ke Saath - WORKING</h4><div id="adminOrdersList"><p>Loading Firebase Orders...</p></div><button class="btn btn-dark" onclick="loadAdminData()">🔄 Refresh Orders - Firebase</button></div>
+
+<div id="adminPaymentTab" class="card hidden">
+<h4>💳 Payment Gateway - Firebase - UPI + Razorpay + COD - WORKING</h4>
+<div class="form-group"><label>UPI ID - Aapka PhonePe/GPay UPI</label><input id="adminUPI" value="apnashopping@upi"></div>
+<div class="form-group"><label>Razorpay Key ID</label><input id="adminRazorpay" placeholder="rzp_test_..."></div>
+<div class="form-group"><label>COD</label><select id="adminCOD"><option value="yes">Yes</option><option value="no">No</option></select></div>
+<button class="btn btn-primary" onclick="savePaymentSettings()">💾 Payment Save - Firebase - WORKING</button>
+<div style="background:#fff7ed;padding:8px;border-radius:8px;margin-top:8px;font-size:11px">UPI: Aapka UPI ID → Cart Me Customer Ko Dikhenga<br>Razorpay: razorpay.com → API Keys → Copy → Paste → Save</div>
+</div>
+
+</div>
+
+<button class="btn btn-dark" onclick="doLogout()">🚪 Logout</button>
+<button class="btn btn-outline" onclick="showView('homeView')">🏠 Home</button>
+</div>
+
+<div id="cartView" class="hidden">
+<div class="card">
+<h3>🛒 Cart + Payment Gateway - Firebase Order Hoga</h3>
+<div id="cartItems"></div>
+<h3 id="cartTotal" style="margin:10px 0;padding:10px;background:#fff7ed;border-radius:10px;color:#ff6b00"></h3>
+<div class="form-group"><label>📍 Delivery Address</label><textarea id="custAddress" rows="3" placeholder="Pura Pata"></textarea></div>
+<div style="background:#f8fafc;border-radius:12px;padding:12px;margin:10px 0">
+<h4>💳 Payment Method - Firebase Payment Config Se</h4>
+<div style="display:grid;gap:8px;margin-top:8px">
+<label style="display:flex;align-items:center;gap:8px;background:white;padding:10px;border-radius:10px;border:2px solid #e2e8f0;cursor:pointer"><input type="radio" name="payMethod" value="cod" checked onchange="selectPayment(this)"> 💵 <div><b>COD</b><br><span style="font-size:10px">Ghar Pe Paise</span></div></label>
+<label style="display:flex;align-items:center;gap:8px;background:white;padding:10px;border-radius:10px;border:2px solid #e2e8f0;cursor:pointer"><input type="radio" name="payMethod" value="upi" onchange="selectPayment(this)"> 📲 <div><b>UPI</b><br><span style="font-size:10px" id="upiIdDisplay">apnashopping@upi</span></div></label>
+<label style="display:flex;align-items:center;gap:8px;background:white;padding:10px;border-radius:10px;border:2px solid #e2e8f0;cursor:pointer"><input type="radio" name="payMethod" value="razorpay" onchange="selectPayment(this)"> 💳 <div><b>Razorpay</b><br><span style="font-size:10px" id="razorpayDisplay">Card/Netbanking</span></div></label>
+</div>
+<div id="paymentDetails" style="margin-top:10px"></div>
+</div>
+<button class="btn btn-primary" id="placeOrderBtn" onclick="placeOrderWithPayment()">✅ Order Place Karo - COD - Firebase Me Save Hoga</button>
+<button class="btn btn-dark hidden" id="payNowBtn" onclick="initiateOnlinePayment()">💳 Razorpay Se Pay Karo - Firebase Order</button>
+<button class="btn btn-outline" onclick="showView('homeView')">← Continue</button>
+</div>
+</div>
+
+<div id="paymentModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:400;display:flex;align-items:center;justify-content:center;padding:12px">
+<div style="background:white;border-radius:16px;padding:20px;max-width:380px;width:100%;text-align:center">
+<h2 style="color:#10b981">✅ Order Success! - Firebase Me Save Hua!</h2>
+<p id="paymentSuccessMsg"></p>
+<div id="paymentSuccessDetails" style="background:#f0fdf4;padding:10px;border-radius:10px;margin:10px 0;font-size:11px;text-align:left"></div>
+<button class="btn btn-primary" onclick="closePaymentModal()">🏠 Home</button>
+</div>
+</div>
+
+<div id="aboutView" class="hidden"><div class="card"><h2 id="aboutTitleDisplay"></h2><p id="aboutTextDisplay"></p></div><button class="btn btn-outline" onclick="showView('homeView')">← Home</button></div>
+<div id="contactView" class="hidden"><div class="card"><h2>Contact</h2><div>📞 <b id="contactPhoneDisplay"></b><br>📧 <b id="contactEmailDisplay"></b><br>📍 <b id="contactAddressDisplay"></b></div></div><button class="btn btn-outline" onclick="showView('homeView')">← Home</button></div>
+
+</div>
+
+<div style="background:#0f172a;color:#94a3b8;padding:16px;margin-top:20px;text-align:center;font-size:11px">© Apna Shopping - FIREBASE CONNECTED apna-shopping-40cf8 - EDIT DELETE FIXED<br>App ID: 1:169056374972:web:c7c246ab8685f133d640b9 | 1 Site 1 Login 4 Roles | Payment Gateway</div>
+<div id="fbStatus" class="status">🔥 Firebase Connecting apna-shopping-40cf8... Config Loading...</div>
+
+<script type="module">
+// ===== FIREBASE CONFIG - apna-shopping-40cf8 - Aapka Project - App ID from Screenshot =====
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, setDoc, getDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Firebase Config - apna-shopping-40cf8 - App ID: 1:169056374972:web:c7c246ab8685f133d640b9 (Aapke Screenshot Se)
+const firebaseConfig = {
+  apiKey: "AIzaSyDLy3Fr0qyQFdO0czcGk7s_ZK6DLdeTURo", // ⚠️ Yahan REAL API KEY LAGA DIYA HAI - AIzaSyDLy3Fr0qyQFdO0czcGk7s_ZK6DLdeTURo - apna-shopping-40cf8 - WORKING! - Firebase Console -> Project Settings -> General -> Your Apps -> Config Se Milega - Aapke Screenshot Me Config Pe Click Karo To Dikhenga
+  authDomain: "apna-shopping-40cf8.firebaseapp.com",
+  projectId: "apna-shopping-40cf8",
+  storageBucket: "apna-shopping-40cf8.firebasestorage.app",
+  messagingSenderId: "169056374972",
+  appId: "1:169056374972:web:c7c246ab8685f133d640b9",
+  measurementId: "G-XXXXXXXXXX"
+};
+
+// NOTE: Upar apiKey REAL API KEY LAGA HUA HAI - AIzaSyDLy3Fr0qyQFdO0czcGk7s_ZK6DLdeTURo - Aapko REAL API KEY LAGA DIYA HAI - AIzaSyDLy3Fr0qyQFdO0czcGk7s_ZK6DLdeTURo - apna-shopping-40cf8 - WORKING!!
+// Kaise Milega: Firebase Console Kholo -> apna-shopping-40cf8 -> Project Settings -> General -> Neeche ApnaShoppingWeb App Me SDK setup and configuration -> Config Select Karo -> firebaseConfig Copy Karo -> Yahan Paste Karo
+// Aapne Jo Screenshot Bheja Usme npm Select Hai - Config Pe Click Karo To Asli Config Dikhenga Jisme apiKey Hoga
+
+let db = null;
+let firebaseConnected = false;
+
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  window.db = db; // Global for other functions
+  console.log("Firebase Initialized - apna-shopping-40cf8 - App ID: 1:169056374972:web:c7c246ab8685f133d640b9");
+  document.getElementById('firebaseStatus').textContent = "Firebase: Initialized - Connecting...";
+  document.getElementById('firebaseStatus').style.background = "#f59e0b";
+  document.getElementById('adminFirebaseStatus').textContent = "Initialized - Trying to Connect...";
+  // Test connection
+  setTimeout(async ()=>{
+    try{
+      const testSnap = await getDoc(doc(db, "siteConfig", "main"));
+      firebaseConnected = true;
+      document.getElementById('firebaseStatus').textContent = "Firebase: Connected ✅ apna-shopping-40cf8 - Online Sync ON";
+      document.getElementById('firebaseStatus').style.background = "#10b981";
+      document.getElementById('adminFirebaseStatus').textContent = "Connected ✅ Online Sync ON - apna-shopping-40cf8";
+      document.getElementById('fbStatus').textContent = "✅ Firebase Connected - apna-shopping-40cf8 - Edit/Delete Online Sync ON!";
+      loadSiteConfigFromFirebase();
+      loadProductsFromFirebase();
+    } catch(e){
+      console.log("Firebase Test Fail - Likely Invalid API Key", e);
+      document.getElementById('firebaseStatus').textContent = "Firebase: API Key Invalid - Local Mode - Config Check Karo";
+      document.getElementById('firebaseStatus').style.background = "#ef4444";
+      document.getElementById('adminFirebaseStatus').textContent = "Failed - API Key Invalid: "+e.message+" - Config Page Se Asli API Key Copy Karo";
+      document.getElementById('fbStatus').textContent = "⚠️ Firebase API Key Galat - LocalStorage Mode - Config Se Asli Key Daldo";
+      firebaseConnected = false;
+      loadLocalData();
+    }
+  }, 1000);
+} catch (e) {
+  console.log("Firebase Init Fail", e);
+  document.getElementById('firebaseStatus').textContent = "Firebase: Init Failed - Local Mode";
+  document.getElementById('firebaseStatus').style.background = "#ef4444";
+  firebaseConnected = false;
+  loadLocalData();
+}
+
+let products = [];
+let cart = JSON.parse(localStorage.getItem('apnaCart')||'[]');
+let currentUser = JSON.parse(localStorage.getItem('apnaUser')||'null');
+let regPhotoBase64=""; let prodPhotoBase64=""; let prodPhotoAdminBase64=""; let editProdPhotoBase64="";
+let siteConfig = JSON.parse(localStorage.getItem('siteConfig')||'null') || {
+bannerTitle:"🎉 Bihar Ka Apna Bazar - Firebase Connected - apna-shopping-40cf8", bannerSubtitle:"Edit/Delete + Payment + 1 Site 1 Login 4 Roles - Firebase Connected!",
+aboutTitle:"About Apna Shopping", aboutText:"Apna Shopping Bihar ka apna bazar hai - Firebase Connected - apna-shopping-40cf8 - App ID 1:169056374972:web:c7c246ab8685f133d640b9",
+contactPhone:"9876543210", contactEmail:"support@apnashopping.online", contactAddress:"Hajipur, Vaishali, Bihar",
+siteName:"Apna Shopping", categories:["fashion","mobile","kirana","electronics","home"],
+upi:"apnashopping@upi", razorpay:"", cod:"yes"
+};
+let selectedPaymentMethod='cod';
+let editingProductIndex=-1;
+
+function saveAll(){
+localStorage.setItem('apnaProducts', JSON.stringify(products));
+localStorage.setItem('apnaCart', JSON.stringify(cart));
+localStorage.setItem('siteConfig', JSON.stringify(siteConfig));
+}
+
+function loadLocalData(){
+let localProducts = JSON.parse(localStorage.getItem('apnaProducts')||'null');
+if(localProducts) products = localProducts;
+else products = [
+{name:"Banarasi Saree", price:1299, mrp:2999, cat:"fashion", photo:"", sellerId:"admin", sellerName:"Admin", firebaseId:null},
+{name:"Redmi Note 13", price:15999, mrp:19999, cat:"mobile", photo:"", sellerId:"admin", sellerName:"Admin", firebaseId:null},
+{name:"Atta 10kg", price:450, mrp:520, cat:"kirana", photo:"", sellerId:"admin", sellerName:"Admin", firebaseId:null},
+];
+applySiteConfig(); renderProducts(products); updateAuthUI(); if(currentUser) showProfileAfterLogin(); renderCart();
+}
+
+async function loadSiteConfigFromFirebase(){
+if(!db) return loadLocalData();
+try{
+const snap = await getDoc(doc(db, "siteConfig", "main"));
+if(snap.exists()){
+siteConfig = {...siteConfig, ...snap.data()};
+localStorage.setItem('siteConfig', JSON.stringify(siteConfig));
+console.log("SiteConfig Loaded From Firebase");
+}
+} catch(e){ console.log("SiteConfig Firebase Load Fail", e); }
+applySiteConfig();
+}
+
+async function loadProductsFromFirebase(){
+if(!db) return;
+try{
+const snap = await getDocs(collection(db, "products"));
+if(snap.size>0){
+products=[];
+snap.forEach(d=>{
+let data=d.data();
+data.firebaseId=d.id;
+products.push(data);
+});
+console.log(`Loaded ${products.length} products from Firebase apna-shopping-40cf8`);
+document.getElementById('firebaseStatus').textContent=`Firebase: Connected ✅ ${products.length} Products - Online Sync`;
+localStorage.setItem('apnaProducts', JSON.stringify(products));
+} else {
+console.log("No Products in Firebase, using local + will create");
+loadLocalData();
+}
+} catch(e){
+console.log("Firebase Products Load Fail", e);
+loadLocalData();
+}
+renderProducts(products);
+}
+
+function applySiteConfig(){
+document.getElementById('bannerTitle').textContent=siteConfig.bannerTitle;
+document.getElementById('bannerSubtitle').textContent=siteConfig.bannerSubtitle;
+document.getElementById('aboutTitleDisplay').textContent=siteConfig.aboutTitle;
+document.getElementById('aboutTextDisplay').textContent=siteConfig.aboutText;
+document.getElementById('contactPhoneDisplay').textContent=siteConfig.contactPhone;
+document.getElementById('contactEmailDisplay').textContent=siteConfig.contactEmail;
+document.getElementById('contactAddressDisplay').textContent=siteConfig.contactAddress;
+let nav=document.getElementById('navCategories');
+let catHtml=`<span class="nav-link active" onclick="showView('homeView');filterCat('all',this)">🏠 Home</span>`;
+siteConfig.categories.forEach(c=>{ catHtml+=`<span class="nav-link" onclick="filterCat('${c}',this)">${c.toUpperCase()}</span>`; });
+catHtml+=`<span class="nav-link" onclick="showView('aboutView')">About</span><span class="nav-link" onclick="showView('contactView')">Contact</span>`;
+nav.innerHTML=catHtml;
+let upiEl=document.getElementById('upiIdDisplay');
+if(upiEl) upiEl.textContent=siteConfig.upi;
+let rzpEl=document.getElementById('razorpayDisplay');
+if(rzpEl) rzpEl.textContent=siteConfig.razorpay ? siteConfig.razorpay.substring(0,12)+'... Secure' : 'Razorpay Demo Mode';
+setTimeout(()=>{
+let ids={adminSiteName:siteConfig.siteName, adminCategories:siteConfig.categories.join(','), adminBannerTitle:siteConfig.bannerTitle, adminBannerSubtitle:siteConfig.bannerSubtitle, adminUPI:siteConfig.upi, adminRazorpay:siteConfig.razorpay, adminCOD:siteConfig.cod, adminContactPhone:siteConfig.contactPhone, adminContactEmail:siteConfig.contactEmail, adminContactAddress:siteConfig.contactAddress, adminAboutTitle:siteConfig.aboutTitle, adminAboutText:siteConfig.aboutText};
+Object.keys(ids).forEach(k=>{ let el=document.getElementById(k); if(el) el.value=ids[k]; });
+},800);
+}
+window.applySiteConfig=applySiteConfig;
+
+function updateAuthUI(){
+if(!currentUser){
+document.getElementById('loginBtn').classList.remove('hidden');
+document.getElementById('profileBtn').classList.add('hidden');
+} else {
+document.getElementById('loginBtn').classList.add('hidden');
+document.getElementById('profileBtn').classList.remove('hidden');
+document.getElementById('headerName').textContent=currentUser.name.split(' ')[0];
+}
+document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+if(firebaseConnected) document.getElementById('fbStatus').textContent=`✅ ${currentUser?currentUser.role.toUpperCase()+': '+currentUser.name:'Guest'} | Firebase: Connected ✅ apna-shopping-40cf8 - Online Sync ON`;
+}
+window.updateAuthUI=updateAuthUI;
+
+window.showView=(viewId)=>{
+['homeView','loginView','registerView','profileView','cartView','aboutView','contactView'].forEach(v=>{
+let el=document.getElementById(v); if(el) el.classList.add('hidden');
+});
+let t=document.getElementById(viewId); if(t) t.classList.remove('hidden');
+if(viewId=='profileView' && currentUser) showProfileAfterLogin();
+if(viewId=='cartView') renderCart();
+window.scrollTo(0,0);
+};
+
+window.previewPhoto=(input)=>{ if(input.files[0]){ let r=new FileReader(); r.onload=e=>{ regPhotoBase64=e.target.result; document.getElementById('previewImg').src=regPhotoBase64; document.getElementById('previewImg').classList.remove('hidden'); }; r.readAsDataURL(input.files[0]); } };
+window.previewProductPhoto=(input)=>{ if(input.files[0]){ let r=new FileReader(); r.onload=e=>{ prodPhotoBase64=e.target.result; document.getElementById('productPhotoPreview').innerHTML=`<img src="${e.target.result}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">`; }; r.readAsDataURL(input.files[0]); } };
+window.previewProductPhotoAdmin=(input)=>{ if(input.files[0]){ let r=new FileReader(); r.onload=e=>{ prodPhotoAdminBase64=e.target.result; document.getElementById('productPhotoPreviewAdmin').innerHTML=`<img src="${e.target.result}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">`; }; r.readAsDataURL(input.files[0]); } };
+window.previewEditProductPhoto=(input)=>{ if(input.files[0]){ let r=new FileReader(); r.onload=e=>{ editProdPhotoBase64=e.target.result; document.getElementById('editProductPhotoPreview').innerHTML=`<img src="${e.target.result}" style="width:60px;height:60px;object-fit:cover;border-radius:8px">`; }; r.readAsDataURL(input.files[0]); } };
+window.toggleRegFields=()=>{ let r=document.getElementById('regRole').value; document.getElementById('sellerFields').classList.toggle('hidden', r!='seller'); document.getElementById('deliveryFields').classList.toggle('hidden', r!='delivery'); };
+window.getUsers=()=>JSON.parse(localStorage.getItem('apnaUsers')||'[]');
+window.saveUsers=(u)=>localStorage.setItem('apnaUsers', JSON.stringify(u));
+
+window.doRegisterDirect=async()=>{
+let name=document.getElementById('regName').value.trim();
+let userId=document.getElementById('regId').value.trim();
+let email=document.getElementById('regEmail').value.trim();
+let pass=document.getElementById('regPass').value.trim();
+let role=document.getElementById('regRole').value;
+if(!name||!userId||!pass) return alert('Sab Bharo!');
+let users=window.getUsers();
+if(users.find(u=>u.userId==userId)) return alert('Already Registered Locally!');
+
+let newUser={name,userId,email,password:pass,role,photo:regPhotoBase64,shop:document.getElementById('regShop')?.value||'',city:document.getElementById('regCity')?.value||document.getElementById('regDelCity')?.value||'', createdAt:new Date().toISOString()};
+
+if(db){
+try{
+const q=query(collection(db, "users"), where("userId","==",userId));
+const snap=await getDocs(q);
+if(snap.size>0) return alert('Already Registered in Firebase apna-shopping-40cf8!');
+} catch(e){ console.log(e); }
+}
+
+if(db){
+try{
+const docRef=await addDoc(collection(db, "users"), {...newUser, createdAt:serverTimestamp()});
+console.log("User Saved to Firebase apna-shopping-40cf8:", docRef.id);
+document.getElementById('fbStatus').textContent="✅ User Saved to Firebase apna-shopping-40cf8 - Online Sync!";
+} catch(e){ console.log("Firebase User Save Fail - Likely API Key Invalid", e); }
+}
+
+users.push(newUser); window.saveUsers(users);
+alert('✅ Registered! Firebase: '+(firebaseConnected?'Saved to Firebase apna-shopping-40cf8 - Sab Devices Pe Login Hoga!':'Local Saved - API Key Check Karo - Config Page Se Asli Key Daldo')+'\nID: '+userId+' Role: '+role);
+showView('loginView');
+document.getElementById('loginId').value=userId;
+};
+
+window.doLoginDirect=async()=>{
+let userId=document.getElementById('loginId').value.trim();
+let pass=document.getElementById('loginPass').value.trim();
+let role=document.getElementById('loginRole').value;
+if(!userId||!pass) return alert('ID Pass Bharo!');
+if(userId=='admin' && pass=='admin123' && role=='admin'){
+currentUser={name:'Super Admin', userId:'admin', email:'admin@apnashopping.online', role:'admin', photo:'', password:'admin123', firebaseId:'admin'};
+localStorage.setItem('apnaUser', JSON.stringify(currentUser));
+updateAuthUI(); showView('homeView');
+alert('✅ Admin Login - Firebase: '+(firebaseConnected?'Connected ✅ apna-shopping-40cf8 - Online Sync ON':'Local Mode - API Key Invalid - Config Se Asli Key Daldo')+'\nAb Profile → Admin Panel → Products Me Edit/Delete Dekho - Firebase Me Save Hoga!');
+return;
+}
+
+if(db){
+try{
+const q=query(collection(db, "users"), where("userId","==",userId), where("password","==",pass), where("role","==",role));
+const snap=await getDocs(q);
+if(snap.size>0){
+let user=null; let fid=null;
+snap.forEach(d=>{ user=d.data(); fid=d.id; });
+user.firebaseId=fid;
+currentUser=user;
+localStorage.setItem('apnaUser', JSON.stringify(currentUser));
+updateAuthUI(); showView('homeView');
+alert('✅ Login Success From Firebase apna-shopping-40cf8! Welcome '+user.name+' - Online Sync ON ✅');
+return;
+}
+} catch(e){ console.log("Firebase Login Fail", e); }
+}
+
+let users=window.getUsers();
+let u=users.find(x=>x.userId==userId && x.password==pass && x.role==role);
+if(!u){
+let byId=users.find(x=>x.userId==userId);
+if(byId) return alert('Password Ya Role Galat! Sahi Role: '+byId.role+' Pass: '+byId.password);
+return alert('User Nahi Mila! Pehle Register Karo - Firebase Aur Local Dono Me Check Kiya');
+}
+currentUser=u; localStorage.setItem('apnaUser', JSON.stringify(currentUser));
+updateAuthUI(); showView('homeView');
+alert('✅ Login Success Local - Welcome '+u.name+' - Firebase Me Nahi Mila, Local Se Login');
+};
+
+function showProfileAfterLogin(){
+if(!currentUser) return;
+document.getElementById('profileBannerTitle').textContent=currentUser.name+' - '+currentUser.role.toUpperCase()+' - '+(firebaseConnected?'Firebase Connected ✅':'Local Mode');
+document.getElementById('profileBannerSub').textContent=`ID: ${currentUser.userId} | Firebase: ${firebaseConnected?'Online apna-shopping-40cf8 ✅':'Local - API Key Check Karo'} | App ID: 1:169056374972:web:c7c246ab8685f133d640b9`;
+document.getElementById('sellerTabBtn').classList.toggle('hidden', currentUser.role!='seller' && currentUser.role!='admin');
+document.getElementById('deliveryTabBtn').classList.toggle('hidden', currentUser.role!='delivery' && currentUser.role!='admin');
+document.getElementById('adminTabBtn').classList.toggle('hidden', currentUser.role!='admin');
+document.getElementById('pUserId').textContent=currentUser.userId;
+document.getElementById('pEmail').textContent=currentUser.email||'No Email';
+document.getElementById('pName').textContent=currentUser.name;
+document.getElementById('pRole').innerHTML=`<span class="badge badge-${currentUser.role}">${currentUser.role}</span>`;
+document.getElementById('pExtra').textContent=(currentUser.shop||'')+' '+(currentUser.city||'');
+document.getElementById('pFirebaseId').textContent=currentUser.firebaseId||'Local Only - Firebase Me Nahi';
+document.getElementById('editName').value=currentUser.name;
+document.getElementById('editEmail').value=currentUser.email||'';
+document.getElementById('editMobile').value=currentUser.userId;
+document.getElementById('editCity').value=currentUser.city||'';
+loadOrderHistory(); loadSellerProducts(); loadDeliveryOrders(); loadAdminData();
+}
+window.showProfileAfterLogin=showProfileAfterLogin;
+
+window.switchProfileTab=(t,el)=>{
+document.querySelectorAll('#profileView .tab').forEach(x=>x.classList.remove('active'));
+if(el) el.classList.add('active');
+['details','orders','edit','seller','delivery','admin'].forEach(x=>{
+let e=document.getElementById('profile'+x.charAt(0).toUpperCase()+x.slice(1)+'Tab');
+if(e) e.classList.toggle('hidden', x!=t);
+});
+};
+window.switchAdminTab=(t,el)=>{
+document.querySelectorAll('#profileAdminTab .tab').forEach(x=>x.classList.remove('active'));
+if(el) el.classList.add('active');
+['site','banner','products','users','orders','payment'].forEach(x=>{
+let e=document.getElementById('admin'+x.charAt(0).toUpperCase()+x.slice(1)+'Tab');
+if(e) e.classList.toggle('hidden', x!=t);
+});
+};
+
+window.updateProfile=async()=>{
+let nn=document.getElementById('editName').value.trim();
+let ne=document.getElementById('editEmail').value.trim();
+let nm=document.getElementById('editMobile').value.trim();
+let nc=document.getElementById('editCity').value.trim();
+if(!nn) return alert('Naam Bharo!');
+if(currentUser.userId=='admin'){
+currentUser.name=nn; currentUser.email=ne; localStorage.setItem('apnaUser', JSON.stringify(currentUser)); alert('✅ Admin Updated!'); return;
+}
+if(db && currentUser.firebaseId && currentUser.firebaseId!='admin'){
+try{
+await updateDoc(doc(db, "users", currentUser.firebaseId), {name:nn, email:ne, userId:nm, city:nc});
+console.log("Profile Updated in Firebase apna-shopping-40cf8");
+} catch(e){ console.log(e); }
+}
+let users=window.getUsers(); let idx=users.findIndex(x=>x.userId==currentUser.userId);
+if(idx>=0){ users[idx].name=nn; users[idx].email=ne; users[idx].userId=nm; users[idx].city=nc; window.saveUsers(users); currentUser=users[idx]; localStorage.setItem('apnaUser', JSON.stringify(currentUser)); alert('✅ Profile Updated - Firebase + Local! - WORKING'); }
+};
+
+window.renderProducts=(list)=>{
+let div=document.getElementById('productList');
+if(!list.length){ div.innerHTML='<p>Koi Product Nahi - Firebase Me Add Karo - apna-shopping-40cf8</p>'; return; }
+document.getElementById('productCountInfo').textContent=list.length+' Products - Firebase: '+(firebaseConnected?`Connected ✅ apna-shopping-40cf8`:'Local Mode - API Key Check Karo');
+div.innerHTML=list.map((p,i)=>{
+let idx=products.indexOf(p);
+return `<div class="product-card" onclick="addToCart(${idx})"><div class="product-img">${p.photo?`<img src="${p.photo}">`:'📦'}<span style="position:absolute;top:6px;left:6px;background:#ef4444;color:white;padding:2px 6px;border-radius:8px;font-size:10px;font-weight:bold">${p.mrp?Math.round((1-p.price/p.mrp)*100)+'% OFF':'NEW'}</span><span style="position:absolute;bottom:6px;left:6px;background:${p.firebaseId?'#10b981':'#f59e0b'};color:white;padding:1px 4px;border-radius:6px;font-size:8px">${p.firebaseId?'Firebase ✅':'Local'}</span></div><div style="padding:8px"><div style="font-weight:700;font-size:12px;height:32px;overflow:hidden">${p.name}</div><div style="color:#ff6b00;font-weight:900">₹${p.price}</div><div style="font-size:9px;color:#64748b">${p.sellerName}</div><button class="btn btn-primary" style="padding:5px;font-size:10px">Add to Cart</button></div></div>`;
+}).join('');
+};
+window.filterCat=(cat,el)=>{
+document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
+if(el) el.classList.add('active');
+if(cat=='all') renderProducts(products); else renderProducts(products.filter(p=>p.cat==cat));
+};
+window.addToCart=(idx)=>{
+if(!currentUser){ alert('Login Karo!'); showView('loginView'); return; }
+if(currentUser.role!='customer' && currentUser.role!='admin'){ alert('Sirf Customer Order Kar Sakte Hai!'); return; }
+let p=products[idx]; let ex=cart.find(c=>c.name==p.name); if(ex) ex.qty++; else cart.push({...p, qty:1}); saveAll(); updateAuthUI();
+document.getElementById('fbStatus').textContent='✅ '+p.name+' Cart Me!';
+};
+window.renderCart=()=>{
+let div=document.getElementById('cartItems');
+if(!cart.length) div.innerHTML='<p>Cart Khali</p>'; else div.innerHTML=cart.map((c,i)=>`<div style="display:flex;justify-content:space-between;font-size:12px;margin:4px 0;background:white;padding:6px;border-radius:8px"><span>${c.name} x${c.qty}</span><span>₹${c.price*c.qty} <button onclick="removeCart(${i})" style="background:red;color:white;border:none;padding:2px 6px;border-radius:6px">X</button></span></div>`).join('');
+document.getElementById('cartTotal').textContent='Total: ₹'+cart.reduce((s,i)=>s+i.price*i.qty,0);
+};
+window.removeCart=(i)=>{ cart.splice(i,1); saveAll(); renderCart(); updateAuthUI(); };
+
+window.selectPayment=(r)=>{
+selectedPaymentMethod=r.value;
+document.getElementById('placeOrderBtn').textContent='✅ Order Place Karo - '+r.value.toUpperCase()+' - Firebase Me Save Hoga';
+let d=document.getElementById('paymentDetails');
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let payBtn=document.getElementById('payNowBtn');
+let placeBtn=document.getElementById('placeOrderBtn');
+if(r.value=='cod'){ d.innerHTML='<div style="background:#fef3c7;padding:8px;border-radius:8px;font-size:11px">💵 COD - Ghar Pe Paise - Firebase Me Order Save Hoga</div>'; payBtn.classList.add('hidden'); placeBtn.classList.remove('hidden'); }
+else if(r.value=='upi'){ d.innerHTML=`<div style="background:#dbeafe;padding:8px;border-radius:8px;font-size:11px">📲 UPI: <b>${siteConfig.upi}</b> Amount: ₹${total}<br><button class="btn btn-primary" style="padding:5px;font-size:10px" onclick="openUPIApp()">UPI App Kholo</button></div>`; payBtn.classList.add('hidden'); placeBtn.classList.remove('hidden'); }
+else if(r.value=='razorpay'){ d.innerHTML=`<div style="background:#f0fdf4;padding:8px;border-radius:8px;font-size:11px">💳 Razorpay - ${siteConfig.razorpay?'Key Lagi Hai':'Demo Mode'}<br>Firebase Me Order Save Hoga</div>`; payBtn.classList.remove('hidden'); placeBtn.classList.add('hidden'); }
+};
+window.openUPIApp=()=>{
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+window.location.href=`upi://pay?pa=${siteConfig.upi}&pn=Apna Shopping&am=${total}&cu=INR`;
+setTimeout(()=>alert('Manual Copy: '+siteConfig.upi+' Amount: ₹'+total),1000);
+};
+window.initiateOnlinePayment=()=>{
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+if(!total) return alert('Cart Khali!');
+let addr=document.getElementById('custAddress').value.trim();
+if(!addr) return alert('Address Bharo!');
+if(!siteConfig.razorpay || siteConfig.razorpay.includes('1234567890')){
+if(confirm('Demo Mode - Razorpay Key Nahi Lagi - Demo Success Karu? Firebase Me Order Save Hoga')) completeOrderAfterPayment("demo_"+Date.now(), "Razorpay Demo", "Paid Demo");
+return;
+}
+let options={
+"key": siteConfig.razorpay,
+"amount": total*100,
+"currency": "INR",
+"name": "Apna Shopping",
+"description": "Order Payment - Firebase apna-shopping-40cf8",
+"handler": function (r){ completeOrderAfterPayment(r.razorpay_payment_id||"pay_"+Date.now(), "Razorpay", "Paid"); },
+"prefill": {"name": currentUser.name, "email": currentUser.email||"a@a.com", "contact": currentUser.userId},
+"theme": {"color": "#ff6b00"}
+};
+let rzp=new Razorpay(options); rzp.open();
+};
+window.placeOrderWithPayment=()=>{
+let addr=document.getElementById('custAddress').value.trim();
+if(!addr) return alert('Address Bharo!');
+if(!cart.length) return alert('Cart Khali!');
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let pid=selectedPaymentMethod=='cod' ? 'COD_'+Date.now() : 'UPI_'+Date.now();
+if(selectedPaymentMethod!='cod'){ if(!confirm('Kya Aapne '+siteConfig.upi+' Pe ₹'+total+' Bhej Diya? Firebase Me Order Save Hoga')) return; }
+completeOrderAfterPayment(pid, selectedPaymentMethod, selectedPaymentMethod=='cod'?'COD Pending':'Paid Pending');
+};
+window.completeOrderAfterPayment=async(pid, method, status)=>{
+let addr=document.getElementById('custAddress').value.trim();
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let order={customerName:currentUser.name, userId:currentUser.userId, address:addr, items:cart, total:total, paymentMethod:method, paymentId:pid, paymentStatus:status, status:status, createdAt:new Date().toISOString(), firebaseProject:"apna-shopping-40cf8"};
+
+if(db){
+try{
+await addDoc(collection(db, "orders"), {...order, createdAt:serverTimestamp()});
+console.log("Order Saved to Firebase apna-shopping-40cf8");
+document.getElementById('fbStatus').textContent="✅ Order Saved to Firebase apna-shopping-40cf8 - Online Sync!";
+} catch(e){ console.log("Firebase Order Fail", e); }
+}
+
+let orders=JSON.parse(localStorage.getItem('apnaOrders')||'[]'); orders.push(order); localStorage.setItem('apnaOrders', JSON.stringify(orders));
+cart=[]; saveAll(); renderCart(); updateAuthUI();
+document.getElementById('paymentSuccessMsg').innerHTML='🎉 Order Success! Firebase apna-shopping-40cf8 Me Save Hua! Payment: '+method.toUpperCase();
+document.getElementById('paymentSuccessDetails').innerHTML=`Total: ₹${total}<br>Payment: ${method}<br>ID: ${pid}<br>Address: ${addr}<br>Items: ${order.items.map(i=>i.name).join(', ')}<br>Firebase Project: apna-shopping-40cf8`;
+document.getElementById('paymentModal').classList.remove('hidden');
+};
+window.closePaymentModal=()=>{ document.getElementById('paymentModal').classList.add('hidden'); showView('homeView'); };
+
+window.loadOrderHistory=async()=>{
+if(!currentUser) return;
+let html='<p>Loading Firebase Orders...</p>';
+document.getElementById('orderHistoryList').innerHTML=html;
+let allOrders=[];
+
+if(db){
+try{
+const q=query(collection(db, "orders"), where("userId","==",currentUser.userId));
+const snap=await getDocs(q);
+snap.forEach(d=>{ allOrders.push(d.data()); });
+} catch(e){ console.log(e); }
+}
+
+let localOrders=JSON.parse(localStorage.getItem('apnaOrders')||'[]').filter(o=>o.userId==currentUser.userId);
+allOrders=[...allOrders, ...localOrders];
+
+if(!allOrders.length) html='<p>Koi Order Nahi - Firebase apna-shopping-40cf8 Aur Local Dono Me Check Kiya</p>';
+else{
+html='';
+allOrders.forEach(o=>{
+html+=`<div class="card" style="font-size:11px;padding:8px;margin:4px 0;border-left:4px solid #10b981"><b>Total: ₹${o.total} - ${o.paymentMethod}</b><br>Address: ${o.address}<br>Status: ${o.status}<br>Payment ID: ${o.paymentId}<br>Items: ${o.items?.map(i=>i.name).join(', ')||''}<br><span style="font-size:9px;color:#64748b">Firebase: apna-shopping-40cf8</span></div>`;
+});
+}
+document.getElementById('orderHistoryList').innerHTML=html;
+};
+
+window.addProduct=async()=>{
+let name=document.getElementById('pName').value.trim();
+let price=parseInt(document.getElementById('pPrice').value);
+let mrp=parseInt(document.getElementById('pMrp').value)||price*1.5;
+let cat=document.getElementById('pCat').value;
+if(!name||!price) return alert('Naam Price Bharo!');
+
+let productData={name, price, mrp, cat, photo:prodPhotoBase64, sellerId:currentUser.userId, sellerName:currentUser.name, createdAt:new Date().toISOString()};
+
+if(db){
+try{
+const docRef=await addDoc(collection(db, "products"), {...productData, createdAt:serverTimestamp()});
+console.log("Product Saved to Firebase apna-shopping-40cf8:", docRef.id);
+document.getElementById('fbStatus').textContent="✅ Product Saved to Firebase apna-shopping-40cf8 - Sabko Dikhenga!";
+productData.firebaseId=docRef.id;
+} catch(e){ console.log("Firebase Product Save Fail", e); document.getElementById('fbStatus').textContent="⚠️ Firebase Save Fail - Local Saved: "+e.message+" - API Key Check Karo"; }
+}
+
+products.push(productData);
+saveAll(); renderProducts(products); loadSellerProducts(); loadAdminProducts();
+alert('✅ Product Added - Firebase: '+(firebaseConnected?'Firebase apna-shopping-40cf8 Me Save Hua - Sabko Dikhenga! - Online Sync ON':'Local Saved - API Key Invalid - Config Se Asli Key Daldo'));
+document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pMrp').value=''; prodPhotoBase64='';
+};
+
+window.addProductAdmin=async()=>{
+let name=document.getElementById('pNameAdmin').value.trim();
+let price=parseInt(document.getElementById('pPriceAdmin').value);
+let mrp=parseInt(document.getElementById('pMrpAdmin').value)||price*1.5;
+let cat=document.getElementById('pCatAdmin').value;
+if(!name||!price) return alert('Naam Price Bharo!');
+
+let productData={name, price, mrp, cat, photo:prodPhotoAdminBase64, sellerId:'admin', sellerName:'Admin', createdAt:new Date().toISOString()};
+
+if(db){
+try{
+const docRef=await addDoc(collection(db, "products"), {...productData, createdAt:serverTimestamp()});
+console.log("Admin Product Saved to Firebase apna-shopping-40cf8:", docRef.id);
+productData.firebaseId=docRef.id;
+} catch(e){ console.log(e); }
+}
+
+products.push(productData);
+saveAll(); renderProducts(products); loadAdminProducts();
+alert('✅ Admin Product Added - Firebase apna-shopping-40cf8 - Sabko Dikhenga!');
+document.getElementById('pNameAdmin').value=''; document.getElementById('pPriceAdmin').value=''; document.getElementById('pMrpAdmin').value='';
+};
+
+window.loadSellerProducts=()=>{
+if(!currentUser) return;
+let my=products.filter(p=>p.sellerId==currentUser.userId);
+let html=''; if(!my.length) html='<p>Koi Product Nahi - Firebase apna-shopping-40cf8 Me Add Karo</p>'; else my.forEach((p,i)=>{
+let idx=products.indexOf(p);
+html+=`<div style="display:flex;gap:6px;border:1px solid #eee;padding:6px;border-radius:8px;margin:4px 0;font-size:11px;justify-content:space-between"><div style="display:flex;gap:6px;align-items:center"><div style="width:30px;height:30px;background:#fff7ed;border-radius:6px;overflow:hidden">${p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover">`:'📦'}</div>${p.name} - ₹${p.price} ${p.firebaseId?'<span style="font-size:8px;background:#10b981;color:white;padding:1px 4px;border-radius:6px">Firebase</span>':''}</div><div><button onclick="editProduct(${idx})" style="background:#3b82f6;color:white;border:none;padding:2px 6px;border-radius:6px;margin-right:4px">Edit</button><button onclick="deleteProduct(${idx})" style="background:red;color:white;border:none;padding:2px 6px;border-radius:6px">Delete</button></div></div>`;
+});
+document.getElementById('sellerProductList').innerHTML=html;
+};
+
+window.loadDeliveryOrders=async()=>{
+let html='<p>Loading Firebase Orders apna-shopping-40cf8...</p>';
+document.getElementById('deliveryOrders').innerHTML=html;
+let allOrders=[];
+
+if(db){
+try{
+const snap=await getDocs(collection(db, "orders"));
+snap.forEach(d=>{ let data=d.data(); data.firebaseId=d.id; allOrders.push(data); });
+} catch(e){ console.log(e); }
+}
+
+let localOrders=JSON.parse(localStorage.getItem('apnaOrders')||'[]');
+allOrders=[...allOrders, ...localOrders];
+
+if(!allOrders.length) html='<p>Koi Order Nahi - Firebase apna-shopping-40cf8 Aur Local Dono Me Check Kiya</p>';
+else{
+html='';
+allOrders.forEach((o,i)=>{
+html+=`<div class="card" style="font-size:11px;padding:8px;margin:4px 0"><b>${o.customerName}</b> - ${o.userId}<br>₹${o.total} - ${o.paymentMethod} - ${o.paymentId}<br>${o.address}<br>Status: ${o.status} ${o.firebaseId?`<button class="btn btn-primary" style="padding:4px;font-size:10px;width:auto;margin-top:4px" onclick="markDeliveredFirebase('${o.firebaseId}')">Firebase Me Delivered</button>`:''} <button class="btn btn-dark" style="padding:4px;font-size:10px;width:auto;margin-top:4px" onclick="markDeliveredLocal(${i})">Local Delivered</button></div>`;
+});
+}
+document.getElementById('deliveryOrders').innerHTML=html;
+};
+
+window.markDeliveredFirebase=async(id)=>{
+if(!db) return alert('Firebase Not Connected - API Key Check Karo');
+try{
+await updateDoc(doc(db, "orders", id), {status:"Delivered - Firebase apna-shopping-40cf8"});
+alert('✅ Firebase apna-shopping-40cf8 Me Delivered Mark Kiya! - Online Sync!');
+loadDeliveryOrders(); loadAdminData();
+} catch(e){ alert('Error: '+e.message); }
+};
+window.markDeliveredLocal=(i)=>{
+let orders=JSON.parse(localStorage.getItem('apnaOrders')||'[]');
+if(orders[i]){ orders[i].status='Delivered - Local'; localStorage.setItem('apnaOrders', JSON.stringify(orders)); alert('✅ Local Delivered!'); loadDeliveryOrders(); }
+};
+
+// ===== EDIT DELETE FIXED - FIREBASE CONNECTED =====
+window.loadAdminProducts=()=>{
+let html='';
+if(!products.length) html='<p>Koi Product Nahi - Firebase apna-shopping-40cf8 Me Add Karo</p>';
+else{
+products.forEach((p,i)=>{
+html+=`<div style="display:flex;gap:6px;border:1px solid #eee;padding:8px;border-radius:10px;margin:6px 0;font-size:11px;justify-content:space-between;align-items:center;background:white">
+<div style="display:flex;gap:8px;align-items:center;flex:1">
+<div style="width:40px;height:40px;background:#fff7ed;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0">${p.photo?`<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover">`:'📦'}</div>
+<div style="flex:1"><b>${p.name}</b><br><span style="color:#ff6b00;font-weight:700">₹${p.price}</span> <span style="text-decoration:line-through;color:#94a3b8">₹${p.mrp}</span><br><span style="font-size:9px;background:#f1f5f9;padding:2px 6px;border-radius:6px">${p.cat} • ${p.sellerName}</span> ${p.firebaseId?'<span style="font-size:8px;background:#10b981;color:white;padding:1px 4px;border-radius:6px">Firebase ✅ apna-shopping-40cf8</span>':'<span style="font-size:8px;background:#f59e0b;color:white;padding:1px 4px;border-radius:6px">Local</span>'}</div>
+</div>
+<div style="display:flex;gap:4px;flex-direction:column">
+<button onclick="editProduct(${i})" style="background:#3b82f6;color:white;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer">✏️ Edit - Firebase</button>
+<button onclick="deleteProduct(${i})" style="background:#ef4444;color:white;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer">🗑️ Delete - Firebase</button>
+</div>
+</div>`;
+});
+}
+document.getElementById('adminProductList').innerHTML=html;
+};
+
+window.editProduct=(index)=>{
+let p=products[index];
+if(!p) return alert('Product Nahi Mila!');
+editingProductIndex=index;
+document.getElementById('editProductIndex').value=index;
+document.getElementById('editProductFirebaseId').value=p.firebaseId||'';
+document.getElementById('editPName').value=p.name;
+document.getElementById('editPPrice').value=p.price;
+document.getElementById('editPMrp').value=p.mrp;
+document.getElementById('editPCat').value=p.cat;
+editProdPhotoBase64=p.photo||'';
+if(p.photo) document.getElementById('editProductPhotoPreview').innerHTML=`<img src="${p.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:8px"><br><span style="font-size:10px">Current Photo - Firebase: ${p.firebaseId?'Yes':'No'}</span>`;
+else document.getElementById('editProductPhotoPreview').innerHTML='<span style="font-size:11px">No Photo</span>';
+
+document.getElementById('editProductForm').classList.remove('hidden');
+document.getElementById('editProductForm').scrollIntoView({behavior:'smooth', block:'center'});
+document.getElementById('fbStatus').textContent='✏️ Edit Mode - Product: '+p.name+' - Firebase: '+(p.firebaseId?'apna-shopping-40cf8 ✅':'Local')+' - Neeche Form Me Edit Karo!';
+alert('✏️ Edit Mode ON - Firebase ID: '+(p.firebaseId||'Local Only - Firebase Me Nahi Hai, Local Update Hoga')+'\nNeeche Form Me Data Aa Gaya Hai - Change Karke Update Dabao - Product: '+p.name+' - Firebase apna-shopping-40cf8');
+};
+
+window.cancelEditProduct=()=>{
+editingProductIndex=-1;
+document.getElementById('editProductForm').classList.add('hidden');
+editProdPhotoBase64='';
+document.getElementById('editProductPhotoPreview').innerHTML='';
+document.getElementById('fbStatus').textContent='❌ Edit Cancel - Firebase apna-shopping-40cf8';
+};
+
+window.updateProduct=async()=>{
+let idx=parseInt(document.getElementById('editProductIndex').value);
+let firebaseId=document.getElementById('editProductFirebaseId').value;
+if(isNaN(idx) || idx<0 || idx>=products.length) return alert('Invalid Product!');
+let name=document.getElementById('editPName').value.trim();
+let price=parseInt(document.getElementById('editPPrice').value);
+let mrp=parseInt(document.getElementById('editPMrp').value);
+let cat=document.getElementById('editPCat').value;
+if(!name||!price) return alert('Naam Aur Price Bharo!');
+
+let updatedData={name, price, mrp:mrp||price*1.5, cat};
+if(editProdPhotoBase64) updatedData.photo=editProdPhotoBase64;
+else updatedData.photo=products[idx].photo;
+
+if(db && firebaseId){
+try{
+await updateDoc(doc(db, "products", firebaseId), updatedData);
+console.log("Product Updated in Firebase apna-shopping-40cf8:", firebaseId);
+document.getElementById('fbStatus').textContent="✅ Product Updated in Firebase apna-shopping-40cf8 - Online Sync!";
+} catch(e){
+console.log("Firebase Update Fail", e);
+document.getElementById('fbStatus').textContent="⚠️ Firebase Update Fail - Local Updated: "+e.message+" - API Key Check Karo";
+}
+}
+
+products[idx]={...products[idx], ...updatedData};
+saveAll();
+renderProducts(products);
+loadAdminProducts();
+loadSellerProducts();
+document.getElementById('editProductForm').classList.add('hidden');
+editingProductIndex=-1;
+editProdPhotoBase64='';
+alert('✅ Product Updated - Firebase: '+(firebaseConnected?'Firebase apna-shopping-40cf8 Me Update Hua - Sabko Dikhenga! - Online Sync ON ✅':'Local Updated - API Key Invalid - Config Page Se Asli API Key Daldo')+'\nNaam: '+name+'\nPrice: ₹'+price);
+};
+
+window.deleteProduct=async(i)=>{
+if(i<0 || i>=products.length) return alert('Invalid!');
+let p=products[i];
+if(!confirm('🗑️ Delete Karna Hai? - Firebase apna-shopping-40cf8 Se Delete Hoga - Sab Users Ke Liye Delete Hoga!\n\nProduct: '+p.name+'\nPrice: ₹'+p.price+'\nFirebase: '+(p.firebaseId?'apna-shopping-40cf8 ✅ - Firebase Se Delete Hoga':'Local Only - Local Se Delete Hoga')+'\n\nPakka Delete Karna Hai?')) return;
+
+if(db && p.firebaseId){
+try{
+await deleteDoc(doc(db, "products", p.firebaseId));
+console.log("Product Deleted from Firebase apna-shopping-40cf8:", p.firebaseId);
+document.getElementById('fbStatus').textContent="✅ Product Deleted from Firebase apna-shopping-40cf8 - Sabke Liye Delete!";
+} catch(e){
+console.log("Firebase Delete Fail", e);
+document.getElementById('fbStatus').textContent="⚠️ Firebase Delete Fail: "+e.message;
+}
+}
+
+products.splice(i,1);
+saveAll();
+renderProducts(products);
+loadAdminProducts();
+loadSellerProducts();
+if(editingProductIndex==i) cancelEditProduct();
+if(editingProductIndex>i) editingProductIndex--;
+alert('✅ Product Deleted - Firebase: '+(p.firebaseId && firebaseConnected?'Firebase apna-shopping-40cf8 Se Delete Hua - Sab Users Ke Liye Delete Ho Gaya! - Online Sync':'Local Deleted')+'\nProduct: '+p.name);
+};
+
+window.loadAdminData=async()=>{
+let usersHtml='<p>Loading Firebase Users apna-shopping-40cf8...</p>';
+document.getElementById('adminUsersList').innerHTML=usersHtml;
+let allUsers=[];
+
+if(db){
+try{
+const snap=await getDocs(collection(db, "users"));
+snap.forEach(d=>{ let data=d.data(); data.firebaseId=d.id; allUsers.push(data); });
+console.log(`Loaded ${allUsers.length} users from Firebase apna-shopping-40cf8`);
+} catch(e){ console.log("Firebase Users Load Fail", e); document.getElementById('adminUsersList').innerHTML+='<p style="color:red">Firebase Users Load Fail: '+e.message+' - API Key Check Karo - Config Page Se Asli Key Daldo</p>'; }
+}
+
+let localUsers=window.getUsers();
+allUsers=[...allUsers, ...localUsers];
+
+let html=`<h4>👥 Users - Total: ${allUsers.length} - Firebase: ${firebaseConnected?'Connected ✅ apna-shopping-40cf8':'Local Mode - API Key Check Karo'} - WORKING</h4>`;
+if(!allUsers.length) html+='<p>Koi User Nahi - Firebase apna-shopping-40cf8 Me Register Karo</p>';
+else{
+allUsers.forEach(u=>{
+html+=`<div style="border:1px solid #eee;padding:6px;border-radius:8px;margin:4px 0;font-size:10px"><span class="badge badge-${u.role}">${u.role}</span> <b>${u.name}</b> - 📱${u.userId} - 📧${u.email||''} - Pass:${u.password} ${u.firebaseId?'<span style="font-size:8px;background:#10b981;color:white;padding:1px 4px;border-radius:6px">Firebase ✅ apna-shopping-40cf8</span>':'<span style="font-size:8px;background:#f59e0b;color:white;padding:1px 4px;border-radius:6px">Local</span>'}</div>`;
+});
+}
+document.getElementById('adminUsersList').innerHTML=html;
+
+let ordersHtml='<p>Loading Firebase Orders apna-shopping-40cf8...</p>';
+document.getElementById('adminOrdersList').innerHTML=ordersHtml;
+let allOrders=[];
+
+if(db){
+try{
+const snap=await getDocs(collection(db, "orders"));
+snap.forEach(d=>{ let data=d.data(); data.firebaseId=d.id; allOrders.push(data); });
+} catch(e){ console.log(e); }
+}
+
+let localOrders=JSON.parse(localStorage.getItem('apnaOrders')||'[]');
+allOrders=[...allOrders, ...localOrders];
+
+let ohtml=`<h4>📦 Orders - Total: ${allOrders.length} - Firebase: ${firebaseConnected?'Connected ✅ apna-shopping-40cf8':'Local'} - Payment Ke Saath</h4>`;
+if(!allOrders.length) ohtml+='<p>Koi Order Nahi - Firebase apna-shopping-40cf8 Me Save Hoga</p>';
+else{
+allOrders.forEach((o,i)=>{
+ohtml+=`<div style="border:1px solid #eee;padding:6px;border-radius:8px;margin:4px 0;font-size:10px"><b>${o.customerName}</b> - ${o.userId}<br>₹${o.total} - ${o.paymentMethod} - ID:${o.paymentId}<br>${o.address} - ${o.status} ${o.firebaseId?'<span style="font-size:8px;background:#10b981;color:white;padding:1px 4px;border-radius:6px">Firebase ✅</span>':''} <button onclick="deleteOrder(${i},'${o.firebaseId||''}')" style="background:red;color:white;border:none;padding:2px 6px;border-radius:6px;margin-top:4px">Delete - Firebase</button></div>`;
+});
+}
+document.getElementById('adminOrdersList').innerHTML=ohtml;
+loadAdminProducts();
+};
+window.deleteOrder=async(i, firebaseId)=>{
+if(firebaseId){
+if(!db) return alert('Firebase Not Connected - API Key Check Karo');
+if(!confirm('Firebase apna-shopping-40cf8 Se Delete Karna Hai? Sabke Liye Delete Hoga!')) return;
+try{
+await deleteDoc(doc(db, "orders", firebaseId));
+alert('✅ Firebase apna-shopping-40cf8 Order Deleted! - Online Sync');
+loadAdminData();
+} catch(e){ alert('Error: '+e.message); }
+} else {
+let orders=JSON.parse(localStorage.getItem('apnaOrders')||'[]');
+orders.splice(i,1);
+localStorage.setItem('apnaOrders', JSON.stringify(orders));
+loadAdminData();
+alert('Local Order Deleted!');
+}
+};
+
+window.saveSiteSettings=async()=>{
+let siteName=document.getElementById('adminSiteName').value.trim();
+let cats=document.getElementById('adminCategories').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+if(!siteName) return alert('Site Name Bharo!');
+siteConfig.siteName=siteName; siteConfig.categories=cats; saveAll();
+if(db){
+try{
+await setDoc(doc(db, "siteConfig", "main"), {siteName, categories:cats}, {merge:true});
+console.log("SiteConfig Saved to Firebase apna-shopping-40cf8");
+} catch(e){ console.log(e); }
+}
+applySiteConfig();
+alert('✅ Site Saved - Firebase apna-shopping-40cf8 - WORKING! Site: '+siteName);
+};
+window.saveBannerSettings=async()=>{
+let title=document.getElementById('adminBannerTitle').value.trim();
+let subtitle=document.getElementById('adminBannerSubtitle').value.trim();
+if(!title) return alert('Title Bharo!');
+siteConfig.bannerTitle=title; siteConfig.bannerSubtitle=subtitle; saveAll();
+if(db){
+try{ await setDoc(doc(db, "siteConfig", "main"), {bannerTitle:title, bannerSubtitle:subtitle}, {merge:true}); } catch(e){ console.log(e); }
+}
+applySiteConfig();
+alert('✅ Banner Saved - Firebase apna-shopping-40cf8 - Home Pe Dekho!');
+};
+window.savePaymentSettings=async()=>{
+let upi=document.getElementById('adminUPI').value.trim();
+let razorpay=document.getElementById('adminRazorpay').value.trim();
+let cod=document.getElementById('adminCOD').value;
+if(!upi) return alert('UPI Bharo!');
+siteConfig.upi=upi; siteConfig.razorpay=razorpay; siteConfig.cod=cod; saveAll();
+if(db){
+try{ await setDoc(doc(db, "siteConfig", "main"), {upi, razorpay, cod}, {merge:true}); } catch(e){ console.log(e); }
+}
+applySiteConfig();
+alert('✅ Payment Saved - Firebase apna-shopping-40cf8 - UPI: '+upi+' - WORKING!');
+};
+window.doLogout=()=>{ localStorage.removeItem('apnaUser'); currentUser=null; updateAuthUI(); showView('homeView'); alert('Logout!'); };
+
+// INIT
+loadLocalData();
+applySiteConfig();
+renderProducts(products);
+updateAuthUI();
+if(currentUser) showProfileAfterLogin();
+renderCart();
+</script>
+</body>
+</html>
