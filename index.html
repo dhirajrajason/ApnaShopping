@@ -81,14 +81,14 @@ body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
 
 <div id="registerView" class="hidden">
 <div class="card" style="max-width:380px;margin:10px auto">
-<h3 style="text-align:center">📝 Register - Firebase Me Save Hoga</h3>
+<h3 style="text-align:center">📝 Register </h3>
 <div class="photo-preview" id="photoPreview" onclick="document.getElementById('regPhoto').click()">📸<img id="previewImg" class="hidden"></div>
 <input type="file" id="regPhoto" accept="image/*" class="hidden" onchange="previewPhoto(this)">
 <div class="form-group"><label>Naam</label><input id="regName"></div>
-<div class="form-group"><label>Mobile (ID)</label><input id="regId"></div>
+<div class="form-group"><label>Mobile no (User ID)</label><input id="regId"></div>
 <div class="form-group"><label>Email</label><input id="regEmail"></div>
 <div class="form-group"><label>Password</label><input id="regPass" type="password"></div>
-<div class="form-group"><label>Role</label><select id="regRole" onchange="toggleRegFields()"><option value="customer">👤 Customer</option><option value="seller">💼 Seller</option><option value="delivery">🚚 Delivery</option><option value="admin">👑 Admin</option></select></div>
+<div class="form-group"><label>Role</label><select id="regRole" onchange="toggleRegFields()"><option value="customer">👤 Customer</option><option value="seller">💼 Seller</option><option value="delivery">🚚 Delivery</option></select></div>
 <div id="sellerFields" class="hidden"><div class="form-group"><label>Dukan Naam</label><input id="regShop"></div><div class="form-group"><label>City</label><input id="regCity"></div></div>
 <div id="deliveryFields" class="hidden"><div class="form-group"><label>City</label><input id="regDelCity"></div></div>
 <button class="btn btn-primary" onclick="doRegisterDirect()">✅ Register - Firebase + Local - WORKING</button>
