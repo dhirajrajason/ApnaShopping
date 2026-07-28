@@ -18,14 +18,14 @@ body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
 .nav-link{padding:6px 12px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer}
 .nav-link.active{background:#ff6b00;color:white}
 .container{max-width:1200px;margin:0 auto;padding:10px}
-.banner{background:linear-gradient(135deg,#ff6b00,#ffb700);color:white;border-radius:14px;padding:18px;min-height:240px}
+.banner{background:linear-gradient(135deg,#ff6b00,#ffb700);color:white;border-radius:14px;padding:18px;min-height:300px}
 .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
 @media(min-width:700px){.product-grid{grid-template-columns:repeat(4,1fr)}}
 .product-card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.06);cursor:pointer}
-.product-img{height:220px;background:#fff7ed;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.product-img{height:250px;background:#fff7ed;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .product-img img{width:100%;height:100%;object-fit:cover}
 .card{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05);margin-bottom:10px}
-.btn{padding:10px;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%;font-size:12px;margin-top:6px}
+.btn{padding:10px;border:none;border-radius:15px;font-weight:700;cursor:pointer;width:100%;font-size:14px;margin-top:6px}
 .btn-primary{background:#ff6b00;color:white}.btn-dark{background:#1e293b;color:white}.btn-outline{background:white;border:2px solid #ff6b00;color:#ff6b00}.btn-danger{background:#ef4444;color:white}.btn-success{background:#10b981;color:white}
 .form-group{margin-bottom:8px}.form-group label{font-size:11px;font-weight:700;display:block;margin-bottom:3px}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:10px;font-size:12px}
@@ -59,7 +59,7 @@ body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
 
 <div id="homeView">
 <div class="banner" id="mainBanner">
-<h2 id="bannerTitle">🎉 Bihar Ka Apna Bazar - Firebase Connected</h2>
+<h2 id="bannerTitle">🎉 Bihar Ka Apna Bazar </h2>
 <p id="bannerSubtitle" style="font-size:12px;margin-top:4px">1 Site 1 Login 4 Roles - Product Edit/Delete - Payment - Firebase apna-shopping-40cf8</p>
 </div>
 <div style="display:flex;justify-content:space-between;margin:14px 0 6px"><h3 id="productsSection">🔥 Top Products - Firebase Se</h3><span id="productCountInfo" style="font-size:11px;color:#64748b"></span></div>
@@ -106,7 +106,7 @@ body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
 <button class="tab" onclick="switchProfileTab('edit',this)">✏️ Edit</button>
 <button class="tab" id="sellerTabBtn" onclick="switchProfileTab('seller',this)">💼 Seller</button>
 <button class="tab" id="deliveryTabBtn" onclick="switchProfileTab('delivery',this)">🚚 Delivery</button>
-<button class="tab" id="adminTabBtn" onclick="switchProfileTab('admin',this)">👑 Admin - Firebase</button>
+<button class="tab" id="adminTabBtn" onclick="switchProfileTab('admin',this)">👑 Admin </button>
 </div>
 <div id="profileDetailsTab" class="card"><div style="font-size:12px;line-height:2"><div>🆔 Mobile: <b id="pUserId"></b></div><div>📧 Email: <b id="pEmail"></b></div><div>👤 Naam: <b id="pName"></b></div><div>🏷️ Role: <b id="pRole"></b></div><div>🏪 Extra: <b id="pExtra"></b></div><div>🔥 Firebase ID: <b id="pFirebaseId" style="font-size:10px"></b></div></div></div>
 <div id="profileOrdersTab" class="card hidden"><h4>📦 My Orders - Firebase Se</h4><div id="orderHistoryList"></div></div>
@@ -126,24 +126,24 @@ body{font-family:'Segoe UI',system-ui;background:#f8fafc;color:#1e293b}
 <button class="tab" onclick="switchAdminTab('payment',this)">💳 Payment</button>
 </div>
 
-<div id="adminSiteTab" class="card"><h4>🏠 Site Settings - Firebase</h4><div class="form-group"><label>Site Name</label><input id="adminSiteName"></div><div class="form-group"><label>Categories</label><input id="adminCategories"></div><button class="btn btn-primary" onclick="saveSiteSettings()">💾 Site Save - Firebase - WORKING</button></div>
+<div id="adminSiteTab" class="card"><h4>🏠 Site Settings </h4><div class="form-group"><label>Site Name</label><input id="adminSiteName"></div><div class="form-group"><label>Categories</label><input id="adminCategories"><label>About</label><input id="adminAbout"></div><div class="form-group"><label>Contact</label><input id="adminContact"></div><div class="form-group"></div><button class="btn btn-primary" onclick="saveSiteSettings()">💾 Site Save - Firebase - WORKING</button></div>
 
-<div id="adminBannerTab" class="card hidden"><h4>🖼️ Banner - Firebase</h4><div class="form-group"><label>Title</label><input id="adminBannerTitle"></div><div class="form-group"><label>Subtitle</label><input id="adminBannerSubtitle"></div><button class="btn btn-primary" onclick="saveBannerSettings()">💾 Banner Save - Firebase - WORKING</button></div>
+<div id="adminBannerTab" class="card hidden"><h4>🖼️ Banner </h4><div class="form-group"></label><input type="file" id="editBannerPhoto" accept="image/*" onchange="Banner(this)"><div id="editBannerPreview"><label>Title</label><input id="adminBannerTitle"></div><div class="form-group"><label>Subtitle</label><input id="adminBannerSubtitle"></div><button class="btn btn-primary" onclick="saveBannerSettings()">💾 Banner Save - Firebase - WORKING</button></div>
 
 <div id="adminProductsTab" class="card hidden">
 <h4>🛍️ Products - EDIT + DELETE - Firebase Connected - 100% FIXED</h4>
 
 <div id="editProductForm" class="hidden" style="background:#fff7ed;border:2px solid #ff6b00;border-radius:12px;padding:12px;margin-bottom:12px">
-<h4 style="color:#ff6b00">✏️ Product Edit Karo - Firebase Me Update Hoga - Sabko Dikhenga!</h4>
+<h4 style="color:#ff6b00">✏️ Edit Products</h4>
 <input type="hidden" id="editProductIndex">
 <input type="hidden" id="editProductFirebaseId">
-<div class="form-group"><label>Photo Change (Naya Lagana Ho To)</label><input type="file" id="editProductPhoto" accept="image/*" onchange="previewEditProductPhoto(this)"><div id="editProductPhotoPreview"></div></div>
+<div class="form-group"><label>Photo Change (New)</label><input type="file" id="editProductPhoto" accept="image/*" onchange="previewEditProductPhoto(this)"><div id="editProductPhotoPreview"></div></div>
 <div class="form-group"><label>Naam</label><input id="editPName"></div>
 <div class="form-group"><label>Price ₹</label><input id="editPPrice" type="number"></div>
 <div class="form-group"><label>MRP ₹</label><input id="editPMrp" type="number"></div>
 <div class="form-group"><label>Category</label><select id="editPCat"><option>fashion</option><option>mobile</option><option>kirana</option><option>electronics</option><option>home</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<button class="btn btn-success" onclick="updateProduct()">✅ Update Karo - Firebase - WORKING</button>
+<button class="btn btn-success" onclick="updateProduct()">✅ Update </button>
 <button class="btn btn-outline" onclick="cancelEditProduct()">❌ Cancel</button>
 </div>
 </div>
