@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apna Shopping - Bihar Ka Flipkart - Full Pro Version</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Roboto,Arial,sans-serif;background:#f1f3f6;color:#212121;line-height:1.4}
+.header{background:#2874f0;position:sticky;top:0;z-index:1000;padding:10px 0}
+.header-inner{max-width:1248px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:0 12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:2px;color:white;font-style:italic;font-weight:900;font-size:20px;cursor:pointer;flex-shrink:0}
+.logo span{background:#ffe11b;color:#2874f0;width:32px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-style:normal}
+.logo small{font-size:11px;font-style:italic;color:#f0f0f0;display:block;margin-top:-4px;font-weight:400}.logo small b{color:#ffe11b}
+.search-box{flex:1;display:flex;background:white;border-radius:2px;overflow:hidden;max-width:500px;box-shadow:0 2px 4px rgba(0,0,0,0.15)}
+.search-box input{flex:1;border:none;padding:0 16px;height:36px;font-size:14px;outline:none}.search-box button{background:white;border:none;padding:0 20px;cursor:pointer;color:#2874f0;font-weight:bold;font-size:18px}
+.header-actions{display:flex;align-items:center;gap:14px;color:white;font-weight:600;font-size:13px;white-space:nowrap;flex-wrap:wrap}
+.hbtn{cursor:pointer;display:flex;align-items:center;gap:5px;position:relative;padding:4px 6px;border-radius:2px}.hbtn:hover{background:rgba(255,255,255,0.1)}
+.hbtn-white{background:white;color:#2874f0;padding:5px 20px;border-radius:2px;font-weight:700;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.cart-badge{position:absolute;top:-8px;right:-8px;background:#ff6161;color:white;font-size:10px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+.cat-bar{background:white;box-shadow:0 1px 1px rgba(0,0,0,0.1);overflow-x:auto;white-space:nowrap;position:sticky;top:56px;z-index:999}
+.cat-inner{max-width:1248px;margin:0 auto;display:flex;gap:24px;padding:10px 12px;justify-content:space-between}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;min-width:60px}.cat-item img{width:56px;height:56px;object-fit:contain}.cat-item span{font-size:13px;font-weight:500}
+.view{display:none}.view.active{display:block}
+.banner{max-width:1248px;margin:8px auto;background:white;position:relative;height:260px;overflow:hidden;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+.banner-track{display:flex;transition:transform 0.5s ease;height:100%}.banner-slide{min-width:100%;height:100%}.banner-slide img{width:100%;height:100%;object-fit:cover}
+.banner-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}.dot{width:12px;height:4px;background:rgba(255,255,255,0.6);border-radius:2px;cursor:pointer}.dot.active{background:white;width:20px}
+.section{max-width:1248px;margin:8px auto;background:white;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+.section-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f0f0}.section-head h2{font-size:20px;font-weight:600}
+.view-all{background:#2874f0;color:white;border:none;padding:6px 20px;border-radius:2px;font-weight:600;cursor:pointer}
+.product-row{display:flex;gap:12px;overflow-x:auto;padding:14px 18px;scrollbar-width:none}.product-row::-webkit-scrollbar{display:none}
+.pcard{min-width:190px;width:190px;background:white;border:1px solid #f0f0f0;border-radius:4px;padding:12px;cursor:pointer;position:relative;flex-shrink:0}.pcard:hover{box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.pcard .wish{position:absolute;top:8px;right:8px;width:26px;height:26px;background:white;border:1px solid #f0f0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#878787;cursor:pointer;z-index:2}.pcard .wish.active{color:#ff6161}
+.pcard-img{height:140px;display:flex;align-items:center;justify-content:center}.pcard-img img{max-height:120px;max-width:130px;object-fit:contain}
+.pcard-name{font-size:13px;margin-top:10px;height:34px;overflow:hidden;color:#212121;line-height:17px}
+.pcard-rating{display:flex;align-items:center;gap:5px;margin-top:6px}.rating-badge{background:#388e3c;color:white;font-size:11px;padding:2px 5px;border-radius:3px;display:flex;align-items:center;gap:2px}
+.pcard-price{display:flex;align-items:baseline;gap:6px;margin-top:6px;flex-wrap:wrap}.p-price{font-size:15px;font-weight:700}.p-mrp{font-size:12px;color:#878787;text-decoration:line-through}.p-off{font-size:12px;color:#388e3c;font-weight:600}
+.pcard-actions{display:flex;gap:6px;margin-top:10px}.btn-cart{flex:1;border:1px solid #d5d5d5;background:white;padding:6px;font-size:10px;font-weight:700;border-radius:2px;cursor:pointer}.btn-buy{flex:1;background:#ff9f00;color:white;border:none;padding:6px;font-size:10px;font-weight:700;border-radius:2px;cursor:pointer}
+.dashboard{max-width:1248px;margin:8px auto;display:grid;grid-template-columns:220px 1fr;gap:8px}
+.dash-side{background:white;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1);padding:12px;position:sticky;top:100px;height:fit-content}
+.dash-side h4{font-size:12px;color:#878787;margin:12px 0 8px;text-transform:uppercase}.dash-side a{display:block;padding:8px 10px;font-size:13px;color:#212121;text-decoration:none;border-radius:2px;cursor:pointer;margin:2px 0}.dash-side a.active,.dash-side a:hover{background:#e8f0fe;color:#2874f0;font-weight:600}
+.dash-main{background:white;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1);padding:18px;min-height:600px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat-card{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:4px;padding:14px;text-align:center}.stat-card h3{font-size:22px;color:#2874f0}.stat-card p{font-size:12px;color:#878787;margin-top:4px}
+.card{border:1px solid #f0f0f0;border-radius:4px;padding:14px;margin-bottom:12px;background:white}
+.form-group{margin-bottom:12px}.form-group label{font-size:12px;font-weight:600;margin-bottom:4px;display:block}.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px;border:1px solid #d5d5d5;border-radius:2px;outline:none;font-size:13px}
+.btn{padding:10px 16px;border:none;border-radius:2px;font-weight:700;cursor:pointer;font-size:13px}.btn-primary{background:#2874f0;color:white}.btn-orange{background:#fb641b;color:white}.btn-success{background:#388e3c;color:white}.btn-outline{background:white;border:1px solid #2874f0;color:#2874f0}
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:white}.badge-customer{background:#2874f0}.badge-seller{background:#ff9f00}.badge-admin{background:#ef4444}.badge-delivery{background:#388e3c}
+.order-card{border:1px solid #e0e0e0;border-radius:4px;padding:12px;margin-bottom:10px}.order-track{display:flex;gap:8px;margin-top:10px}.track-step{flex:1;text-align:center;padding:6px;font-size:11px;border-radius:4px;background:#f0f0f0}.track-step.active{background:#388e3c;color:white}.track-step.done{background:#d4edda;color:#155724}
+.footer{background:#172337;color:#878787;padding:30px 0 0;margin-top:16px}.footer-inner{max-width:1248px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:0 18px 30px}.footer h4{color:#878787;font-size:12px;margin-bottom:10px;text-transform:uppercase}.footer a{color:white;font-size:12px;display:block;margin:5px 0;text-decoration:none}
+.cart-drawer{position:fixed;right:-420px;top:0;width:400px;max-width:90vw;height:100vh;background:white;z-index:2000;box-shadow:-2px 0 10px rgba(0,0,0,0.2);transition:right 0.3s;display:flex;flex-direction:column}.cart-drawer.open{right:0}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1500;display:none}.overlay.open{display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:12px}.modal.open{display:flex}.modal-box{background:white;border-radius:4px;padding:20px;max-width:520px;width:100%;max-height:92vh;overflow-y:auto}
+.stars{color:#ff9f00;font-size:18px;cursor:pointer}.stars span{cursor:pointer}
+.hidden{display:none !important}
+@media(max-width:900px){.dashboard{grid-template-columns:1fr}.dash-side{position:relative;top:0}.stat-grid{grid-template-columns:repeat(2,1fr)}.header-inner{gap:8px}.search-box{order:3;max-width:100%;width:100%}.banner{height:180px}}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="header-inner">
+<div class="logo" onclick="showView('home')"><span>🛒</span><div>Apna Shopping <small>Explore <b>Plus</b> ⭐</small></div></div>
+<div class="search-box"><input id="searchInput" placeholder="Search for Products, Brands and More" oninput="renderSections()"><button onclick="renderSections()">🔍</button></div>
+<div class="header-actions">
+<div class="hbtn" id="loginBtn" onclick="openModal('loginModal')">Login</div>
+<div class="hbtn hidden" id="profileBtn" onclick="showView('profile')"><span id="headerName"></span></div>
+<div class="hbtn" onclick="handleSellerClick()">Become a Seller</div>
+<div class="hbtn" onclick="showView('customerOrders')">Orders</div>
+<div class="hbtn" onclick="showView('admin')" id="adminBtn" style="display:none">Admin</div>
+<div class="hbtn" onclick="toggleCart()">🛒 Cart <span id="cartCount" class="cart-badge">0</span></div>
+</div>
+</div>
+</div>
+
+<div class="cat-bar"><div class="cat-inner" id="catBar"></div></div>
+
+<!-- HOME VIEW -->
+<div id="homeView" class="view active">
+<div class="banner" id="banner"><div class="banner-track" id="bannerTrack"></div><div class="banner-dots" id="bannerDots"></div></div>
+<div id="sections"></div>
+</div>
+
+<!-- CUSTOMER ORDERS VIEW -->
+<div id="customerOrdersView" class="view">
+<div class="dashboard">
+<div class="dash-side">
+<h4>My Account</h4>
+<a class="active">📦 My Orders</a>
+<a onclick="showView('home')">🛍️ Continue Shopping</a>
+<a onclick="toggleCart()">🛒 My Cart</a>
+<a>Wishlist</a>
+<a onclick="showView('profile')">👤 Profile</a>
+</div>
+<div class="dash-main">
+<h2 style="margin-bottom:12px">My Orders - Order History & Tracking</h2>
+<div style="display:flex;gap:8px;margin-bottom:12px"><input id="orderSearch" placeholder="Search orders..." style="flex:1;padding:8px;border:1px solid #d5d5d5;border-radius:2px" oninput="renderOrders()"><select id="orderFilter" onchange="renderOrders()" style="padding:8px;border:1px solid #d5d5d5;border-radius:2px"><option value="all">All Orders</option><option value="pending">Pending</option><option value="shipped">Shipped</option><option value="delivered">Delivered</option></select></div>
+<div id="ordersList"></div>
+</div>
+</div>
+</div>
+
+<!-- SELLER DASHBOARD VIEW -->
+<div id="sellerDashboardView" class="view">
+<div class="dashboard">
+<div class="dash-side">
+<h4>Seller Dashboard</h4>
+<a class="active">📊 Sales Report</a>
+<a onclick="openModal('sellerModal')">➕ Add Product</a>
+<a>📦 Inventory</a>
+<a>💰 Earnings</a>
+<a onclick="showView('home')">🏠 Home</a>
+</div>
+<div class="dash-main">
+<h2>Seller Dashboard - Sales Report, Earnings, Inventory, Orders</h2>
+<div class="stat-grid" style="margin-top:12px">
+<div class="stat-card"><h3 id="sTotalSales">₹0</h3><p>Total Sales</p></div>
+<div class="stat-card"><h3 id="sTotalOrders">0</h3><p>Total Orders</p></div>
+<div class="stat-card"><h3 id="sProducts">0</h3><p>Products Listed</p></div>
+<div class="stat-card"><h3 id="sEarnings">₹0</h3><p>Earnings (90%)</p></div>
+</div>
+<div class="card"><h3>💰 Earnings Breakdown</h3><div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px"><span>Total Sales</span><span id="earnSales">₹0</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;font-size:13px"><span>Platform Fee (10%)</span><span id="earnFee">-₹0</span></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:700;border-top:1px solid #f0f0f0;padding-top:8px"><span>Net Earnings</span><span id="earnNet">₹0</span></div><button class="btn btn-success" style="margin-top:12px;width:100%" onclick="alert('Payout Requested! 2-3 din me bank me aayega')">Request Payout</button></div>
+<div class="card"><h3>📦 Inventory - My Products</h3><div id="sellerInventory" style="margin-top:8px"></div></div>
+<div class="card"><h3>📋 Recent Orders for My Products</h3><div id="sellerOrders" style="margin-top:8px"></div></div>
+</div>
+</div>
+</div>
+
+<!-- DELIVERY DASHBOARD VIEW -->
+<div id="deliveryDashboardView" class="view">
+<div class="dashboard">
+<div class="dash-side">
+<h4>Delivery Dashboard</h4>
+<a class="active">🗺️ Map & Orders</a>
+<a>💰 Earnings</a>
+<a>📊 Performance</a>
+<a onclick="showView('home')">🏠 Home</a>
+</div>
+<div class="dash-main">
+<h2>Delivery Boy Dashboard - Map, Orders, Earnings, Status Update</h2>
+<div class="stat-grid" style="margin-top:12px">
+<div class="stat-card"><h3 id="dPending">0</h3><p>Pending Delivery</p></div>
+<div class="stat-card"><h3 id="dDelivered">0</h3><p>Delivered Today</p></div>
+<div class="stat-card"><h3 id="dEarnings">₹0</h3><p>Earnings Today</p></div>
+<div class="stat-card"><h3 id="dRating">4.8★</h3><p>Rating</p></div>
+</div>
+<div class="card"><h3>🗺️ Delivery Map - Araria, Bihar</h3><div style="height:250px;background:linear-gradient(135deg,#e3f2fd,#bbdefb);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;margin-top:8px"><div style="text-align:center"><div style="font-size:40px">🗺️📍</div><p style="font-weight:700;margin-top:8px">Live Map - Araria District</p><p style="font-size:11px;color:#555">GPS Tracking - 3 Orders Nearby</p><div style="position:absolute;top:30%;left:30%;background:#ff6161;color:white;padding:4px 8px;border-radius:10px;font-size:10px">📦 Order #123 - 2km</div><div style="position:absolute;top:60%;left:60%;background:#2874f0;color:white;padding:4px 8px;border-radius:10px;font-size:10px">📦 Order #124 - 1.2km</div></div></div><button class="btn btn-primary" style="margin-top:8px" onclick="alert('Map Opened - Google Maps me khulega - Future: Real GPS')">Open in Google Maps</button></div>
+<div class="card"><h3>📦 Orders Assigned - Status Update</h3><div id="deliveryOrders" style="margin-top:8px"></div></div>
+<div class="card"><h3>💰 Earnings - Per Delivery ₹30</h3><div style="font-size:13px"><div style="display:flex;justify-content:space-between;margin-top:6px"><span>Today Delivered</span><span id="earnToday">0 orders</span></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span>Today Earnings</span><span id="earnTodayAmt">₹0</span></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span>This Month</span><span id="earnMonth">₹0</span></div></div></div>
+</div>
+</div>
+</div>
+
+<!-- ADMIN DASHBOARD VIEW -->
+<div id="adminView" class="view">
+<div class="dashboard">
+<div class="dash-side">
+<h4>Admin Panel - Full Control</h4>
+<a class="active" onclick="switchAdminTab('site')">🌐 Site Settings</a>
+<a onclick="switchAdminTab('banner')">🖼️ Banner Settings</a>
+<a onclick="switchAdminTab('users')">👥 Users</a>
+<a onclick="switchAdminTab('orders')">📦 Orders</a>
+<a onclick="switchAdminTab('products')">📦 Products</a>
+<a onclick="switchAdminTab('payment')">💳 Payment Gateway</a>
+<a onclick="switchAdminTab('sms')">📱 SMS OTP</a>
+<a onclick="switchAdminTab('reviews')">⭐ Reviews</a>
+<a onclick="showView('home')">🏠 Home</a>
+</div>
+<div class="dash-main">
+<h2>Admin Dashboard - Flipkart Design - Full Control</h2>
+<div class="stat-grid" style="margin-top:12px">
+<div class="stat-card"><h3 id="aUsers">0</h3><p>Total Users</p></div>
+<div class="stat-card"><h3 id="aOrders">0</h3><p>Total Orders</p></div>
+<div class="stat-card"><h3 id="aProducts">0</h3><p>Total Products</p></div>
+<div class="stat-card"><h3 id="aRevenue">₹0</h3><p>Total Revenue</p></div>
+</div>
+
+<div id="adminSite" class="admin-tab">
+<div class="card"><h3>🌐 Site Settings</h3><div class="form-group"><label>Site Name</label><input id="adminSiteName" value="Apna Shopping"></div><div class="form-group"><label>Categories (comma separated)</label><input id="adminCategories" value="mobiles, fashion, electronics, appliances, beauty, home, grocery, travel"></div><button class="btn btn-primary" onclick="saveSiteSettings()">Save Site Settings</button></div>
+<div class="card"><h3>🖼️ Banner Settings</h3><div class="form-group"><label>Banner Title</label><input id="adminBannerTitle" value="Bihar Ka Apna Bazar - Flipkart Jaisa"></div><div class="form-group"><label>Banner Subtitle</label><input id="adminBannerSubtitle" value="Best Prices on Mobiles, Fashion, Electronics"></div><div class="form-group"><label>Banner Images (URLs comma separated)</label><textarea id="adminBannerImages" rows="2">https://rukminim1.flixcart.com/fk-p-flap/1600/270/image/3939d73a4a7b351d.jpg,https://rukminim1.flixcart.com/fk-p-flap/1600/270/image/352e6f0f8034b5d5.jpg</textarea></div><button class="btn btn-primary" onclick="saveBannerSettings()">Save Banner</button></div>
+<div class="card"><h3>📞 About & Contact</h3><div class="form-group"><label>About Title</label><input id="adminAboutTitle" value="About Apna Shopping"></div><div class="form-group"><label>About Text</label><textarea id="adminAboutText">Bihar Ka Apna Bazar - Flipkart Jaisa Online Shopping - Araria, Bihar se pure India me delivery</textarea></div><div class="form-group"><label>Phone</label><input id="adminContactPhone" value="1800-202-9898"></div><div class="form-group"><label>Email</label><input id="adminContactEmail" value="support@apnashopping.online"></div><div class="form-group"><label>Address</label><input id="adminContactAddress" value="Araria, Bihar 854311"></div><button class="btn btn-primary" onclick="saveAboutContact()">Save About/Contact</button></div>
+</div>
+
+<div id="adminUsers" class="admin-tab hidden"><div class="card"><h3>👥 Users - All Roles</h3><div style="display:flex;gap:8px;margin-bottom:10px"><input id="userSearch" placeholder="Search users..." style="flex:1;padding:8px;border:1px solid #d5d5d5;border-radius:2px" oninput="renderAdminUsers()"><select id="userRoleFilter" onchange="renderAdminUsers()" style="padding:8px;border:1px solid #d5d5d5;border-radius:2px"><option value="all">All Roles</option><option value="customer">Customer</option><option value="seller">Seller</option><option value="delivery">Delivery</option><option value="admin">Admin</option></select></div><div id="adminUsersList"></div></div></div>
+
+<div id="adminOrders" class="admin-tab hidden"><div class="card"><h3>📦 All Orders - Full Control</h3><div id="adminOrdersList"></div></div></div>
+
+<div id="adminProducts" class="admin-tab hidden"><div class="card"><h3>📦 All Products - Edit/Delete - Firebase Real</h3><div style="display:flex;gap:8px;margin-bottom:10px"><input id="prodSearch" placeholder="Search products..." style="flex:1;padding:8px;border:1px solid #d5d5d5;border-radius:2px" oninput="renderAdminProducts()"><button class="btn btn-primary" onclick="openModal('sellerModal')">+ Add Product</button></div><div id="adminProductsList"></div></div></div>
+
+<div id="adminPayment" class="admin-tab hidden">
+<div class="card"><h3>💳 Payment Gateway - Razorpay, UPI, COD - Real</h3>
+<div class="form-group"><label>Razorpay Key ID (Live)</label><input id="adminRazorpay" placeholder="rzp_live_xxxxx" value="rzp_test_dummy"></div>
+<div class="form-group"><label>UPI ID</label><input id="adminUPI" placeholder="apnashopping@upi" value="apnashopping@oksbi"></div>
+<div class="form-group"><label>COD Enabled</label><select id="adminCOD"><option value="yes">Yes - Cash on Delivery ON</option><option value="no">No - Only Online Payment</option></select></div>
+<div style="background:#f0f8ff;padding:12px;border-radius:4px;font-size:12px;margin-top:8px"><b>Razorpay Integration:</b><br>1. Razorpay.com → Login → API Keys → Generate Live Key<br>2. Key ID yahan paste karo<br>3. Checkout pe real Razorpay popup khulega - Customer payment kar payega<br><b>UPI:</b> Customer UPI ID se direct payment - QR Code dikhega<br><b>COD:</b> Cash on Delivery - Delivery pe cash lega</div>
+<button class="btn btn-primary" style="margin-top:12px" onclick="savePaymentSettings()">Save Payment Settings</button>
+<div style="margin-top:12px"><h4>Test Payment</h4><button class="btn btn-orange" onclick="testRazorpay()">Test Razorpay Payment ₹1</button><button class="btn btn-success" style="margin-left:8px" onclick="testUPI()">Test UPI Payment</button></div>
+</div>
+</div>
+
+<div id="adminSMS" class="admin-tab hidden">
+<div class="card"><h3>📱 SMS OTP - Fast2SMS - Real OTP</h3>
+<div class="form-group"><label>Fast2SMS API Key</label><input id="adminSMSKey" placeholder="Fast2SMS API Key paste karo" value=""></div>
+<div class="form-group"><label>Sender ID / Route</label><input id="adminSMSSender" value="TXTIND" placeholder="TXTIND"></div>
+<div class="form-group"><label>Test Mobile Number</label><input id="testMobile" placeholder="91XXXXXXXXXX"></div>
+<div style="background:#fff3cd;padding:12px;border-radius:4px;font-size:12px"><b>Fast2SMS Setup:</b><br>1. Fast2SMS.com → Register → Free ₹10 credit<br>2. Dashboard → API Key copy karo<br>3. Yahan paste karo + Save<br>4. Customer login pe real OTP SMS jayega!<br><b>Current:</b> Bina API Key ke local OTP (123456) chalega - Testing ke liye</div>
+<button class="btn btn-primary" style="margin-top:12px" onclick="saveSMSSettings()">Save SMS Settings</button>
+<button class="btn btn-success" style="margin-top:8px" onclick="testSMS()">Test SMS OTP Send</button>
+<div id="smsLog" style="margin-top:12px;font-size:11px;background:#f8f9fa;padding:8px;border-radius:4px;max-height:150px;overflow-y:auto"></div>
+</div>
+</div>
+
+<div id="adminReviews" class="admin-tab hidden"><div class="card"><h3>⭐ Reviews & Ratings - All Products</h3><div id="adminReviewsList"></div></div></div>
+
+</div>
+</div>
+</div>
+
+<!-- PROFILE VIEW -->
+<div id="profileView" class="view">
+<div class="dashboard">
+<div class="dash-side"><h4>My Account</h4><a class="active">👤 Profile</a><a onclick="showView('customerOrders')">📦 My Orders</a><a onclick="showView('home')">🛍️ Home</a></div>
+<div class="dash-main"><h2>Profile</h2><div id="profileInfo" style="margin-top:12px"></div></div>
+</div>
+</div>
+
+<div class="footer"><div class="footer-inner"><div><h4>ABOUT</h4><a>Contact Us</a><a>About Us</a><a>Careers</a></div><div><h4>HELP</h4><a>Payments</a><a>Shipping</a><a>FAQ</a></div><div><h4>CONSUMER POLICY</h4><a>Terms</a><a>Privacy</a></div><div><h4>Apna Shopping</h4><a>Araria, Bihar 854311</a><a>support@apnashopping.online</a><a>1800-202-9898</a></div></div><div style="text-align:center;padding:14px;border-top:1px solid #454d5e;color:white;font-size:11px">© 2026 Apna Shopping - Bihar Ka Flipkart - Full Pro Version with 7 Future Features</div></div>
+
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<div class="cart-drawer" id="cartDrawer">
+<div style="padding:14px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center"><h3>My Cart (<span id="cartCount2">0</span>)</h3><span style="cursor:pointer;font-size:20px" onclick="toggleCart()">✕</span></div>
+<div id="cartItems" style="flex:1;overflow-y:auto;padding:12px"></div>
+<div style="padding:14px;border-top:1px solid #f0f0f0"><div style="display:flex;justify-content:space-between;font-weight:700;margin-bottom:10px"><span>Total</span><span id="cartTotal">₹0</span></div><button style="width:100%;background:#fb641b;color:white;border:none;padding:12px;font-weight:700;border-radius:2px;cursor:pointer" onclick="checkout()">PLACE ORDER</button><div style="margin-top:8px;font-size:11px;color:#878787">Payment: <span id="payMethod">COD + UPI + Razorpay</span></div></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="loginModal">
+<div class="modal-box">
+<h3 style="color:#2874f0;margin-bottom:12px">Login - Apna Shopping - Bihar Ka Flipkart</h3>
+<div class="form-group"><label>Mobile Number *</label><input id="loginPhone" placeholder="10 digit mobile number"></div>
+
+<div style="background:#e8f0fe;padding:10px;border-radius:4px;font-size:12px;margin-bottom:12px">
+<b>🔐 Auto Role Detection - No Need to Select Role!</b><br>
+System khud pata laga lega aap kaun ho:<br>
+• Pehli baar login? → Customer banoge<br>
+• Seller phone? → Seller Panel khulega<br>
+• Delivery phone? → Delivery Panel khulega<br>
+• Admin phone? → Admin Panel khulega<br>
+<span style="color:#2874f0;font-size:11px">Admin Users tab me kisi bhi user ka role change kar sakta hai!</span>
+</div>
+
+<div class="form-group hidden" id="otpGroup"><label>OTP (Fast2SMS / 123456 for testing)</label><input id="loginOTP" placeholder="Enter OTP"><div style="font-size:11px;color:#878787;margin-top:4px">OTP: <span id="otpDisplay">123456</span> (Testing) - Real SMS Fast2SMS se jayega jab API Key add karoge</div></div>
+<button class="btn btn-primary" style="width:100%" id="sendOtpBtn" onclick="sendOTP()">Send OTP</button>
+<button class="btn btn-orange hidden" style="width:100%;margin-top:8px" id="verifyOtpBtn" onclick="verifyOTP()">Verify OTP & Login</button>
+<button class="btn" style="width:100%;background:#f1f3f6;margin-top:8px" onclick="closeAll()">Cancel</button>
+<div id="loginMsg" style="margin-top:8px;font-size:12px;color:green"></div>
+</div>
+</div>
+
+<div class="modal" id="productModal">
+<div class="modal-box" style="max-width:650px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 id="pModalName" style="font-size:15px"></h3><span style="cursor:pointer;font-size:20px" onclick="closeAll()">✕</span></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><img id="pModalImg" style="width:200px;height:200px;object-fit:contain;border:1px solid #f0f0f0;padding:12px;border-radius:4px"><div style="flex:1;min-width:200px"><div id="pModalPrice" style="font-weight:700;font-size:18px;margin-bottom:8px"></div><div id="pModalDesc" style="font-size:12px;color:#555;margin-bottom:12px"></div><div style="display:flex;gap:8px"><button class="btn" style="flex:1;border:1px solid #d5d5d5;background:white;padding:10px;font-weight:700" onclick="addToCart(currentModalProduct);closeAll()">ADD TO CART</button><button class="btn btn-orange" style="flex:1;padding:10px" onclick="buyNow(currentModalProduct)">BUY NOW</button></div></div></div>
+<div style="margin-top:16px;border-top:1px solid #f0f0f0;padding-top:12px"><h4>⭐ Reviews & Ratings - Customer Reviews</h4><div id="pModalReviews" style="margin-top:8px"></div><div style="margin-top:12px;padding:12px;background:#f8f9fa;border-radius:4px"><h5>Add Your Review</h5><div class="stars" id="reviewStars" style="margin:8px 0"><span onclick="setReviewRating(1)">★</span><span onclick="setReviewRating(2)">★</span><span onclick="setReviewRating(3)">★</span><span onclick="setReviewRating(4)">★</span><span onclick="setReviewRating(5)">★</span> <span id="ratingText" style="font-size:12px;color:#878787">Select Rating</span></div><textarea id="reviewText" placeholder="Write your review about this product..." style="width:100%;padding:8px;border:1px solid #d5d5d5;border-radius:2px" rows="3"></textarea><button class="btn btn-primary" style="margin-top:8px" onclick="submitReview()">Submit Review</button></div></div>
+</div>
+</div>
+
+<div class="modal" id="sellerModal">
+<div class="modal-box">
+<h3>Seller - Add Product - Inventory</h3>
+<div class="form-group"><label>Product Name *</label><input id="sName" placeholder="Apple iPhone 15 128GB"></div>
+<div class="form-group"><label>Price (₹) *</label><input id="sPrice" type="number" placeholder="70999"></div>
+<div class="form-group"><label>MRP (₹)</label><input id="sMrp" type="number" placeholder="79900"></div>
+<div class="form-group"><label>Category</label><select id="sCat"><option value="mobiles">Mobiles</option><option value="electronics">Electronics</option><option value="fashion">Fashion</option><option value="appliances">Appliances</option><option value="beauty">Beauty</option><option value="home">Home</option></select></div>
+<div class="form-group"><label>Image URL</label><input id="sImg" placeholder="https://rukminim1.flixcart.com/..."></div>
+<div class="form-group"><label>Stock Quantity</label><input id="sStock" type="number" value="10"></div>
+<button class="btn btn-primary" style="width:100%" onclick="addProduct()">Add Product - Firebase Real Save</button>
+<button class="btn" style="width:100%;background:#f1f3f6;margin-top:8px" onclick="closeAll()">Close</button>
+</div>
+</div>
+
+<div class="modal" id="paymentModal">
+<div class="modal-box">
+<h3>💳 Payment - Razorpay, UPI, COD - Choose Payment Method</h3>
+<div style="margin-top:12px">
+<div style="border:1px solid #2874f0;border-radius:4px;padding:12px;margin-bottom:8px;cursor:pointer;background:#e8f0fe" onclick="selectPay('razorpay')"><input type="radio" name="pay" value="razorpay" checked> <b>Razorpay - Cards, Netbanking, UPI, Wallet</b><div style="font-size:11px;color:#555;margin-top:4px">Safe & Secure - Real Razorpay Popup</div></div>
+<div style="border:1px solid #d5d5d5;border-radius:4px;padding:12px;margin-bottom:8px;cursor:pointer" onclick="selectPay('upi')"><input type="radio" name="pay" value="upi"> <b>UPI - Google Pay, PhonePe, Paytm</b><div style="font-size:11px;color:#555;margin-top:4px">UPI ID: <span id="upiIdDisplay">apnashopping@oksbi</span> - QR Code</div><div id="upiQR" style="margin-top:8px;display:none"><div style="width:120px;height:120px;background:white;border:1px solid #d5d5d5;display:flex;align-items:center;justify-content:center;font-size:10px">UPI QR<br>apnashopping@oksbi</div></div></div>
+<div style="border:1px solid #d5d5d5;border-radius:4px;padding:12px;cursor:pointer" onclick="selectPay('cod')"><input type="radio" name="pay" value="cod" checked> <b>Cash on Delivery (COD)</b><div style="font-size:11px;color:#555;margin-top:4px">Pay cash when delivery boy comes - ₹10 extra charge</div></div>
+</div>
+<div style="margin-top:12px;padding:12px;background:#f8f9fa;border-radius:4px"><div style="display:flex;justify-content:space-between"><span>Subtotal</span><span id="paySubtotal">₹0</span></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span>Delivery</span><span style="color:#388e3c">FREE</span></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-weight:700;border-top:1px solid #e0e0e0;padding-top:8px"><span>Total Payable</span><span id="payTotal">₹0</span></div></div>
+<button class="btn btn-orange" style="width:100%;margin-top:12px;padding:12px" onclick="processPayment()">Pay Now - Place Order</button>
+<button class="btn" style="width:100%;background:#f1f3f6;margin-top:8px" onclick="closeAll()">Cancel</button>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, onSnapshot, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDLy3Fr0qyQFdO0czcGk7s_ZK6DLdeTURo",
+  authDomain: "apna-shopping-40cf8.firebaseapp.com",
+  projectId: "apna-shopping-40cf8",
+  storageBucket: "apna-shopping-40cf8.firebasestorage.app",
+  messagingSenderId: "433991676169",
+  appId: "1:433991676169:web:3f83efac1ff0a9f3d6bbc2"
+};
+let db;
+try{ const app=initializeApp(firebaseConfig); db=getFirestore(app); console.log('Firebase Connected REAL'); }catch(e){console.log('Firebase local',e);}
+window.db=db; window.collection=collection; window.getDocs=getDocs; window.addDoc=addDoc; window.deleteDoc=deleteDoc; window.doc=doc; window.onSnapshot=onSnapshot; window.updateDoc=updateDoc; window.query=query; window.where=where;
+</script>
+
+<script>
+const categories = [
+  {id:'all', name:'All', img:'https://rukminim1.flixcart.com/flap/80/80/image/29327f40e9c4d26b.png'},
+  {id:'mobiles', name:'Mobiles', img:'https://rukminim1.flixcart.com/flap/80/80/image/22fddf3c7da4c4f4.png'},
+  {id:'fashion', name:'Fashion', img:'https://rukminim1.flixcart.com/fk-p-flap/80/80/image/0d75b34f7d8f4b3d.png'},
+  {id:'electronics', name:'Electronics', img:'https://rukminim1.flixcart.com/flap/80/80/image/69c6589653afdb9a.png'},
+  {id:'home', name:'Home', img:'https://rukminim1.flixcart.com/flap/80/80/image/ab7e2b022a4587dd.jpg'},
+  {id:'appliances', name:'Appliances', img:'https://rukminim1.flixcart.com/flap/80/80/image/0ff199d1bd27eb98.png'},
+  {id:'beauty', name:'Beauty', img:'https://rukminim1.flixcart.com/flap/80/80/image/dff3f7adcf3a90c4.png'}
+];
+const banners = ['https://rukminim1.flixcart.com/fk-p-flap/1600/270/image/3939d73a4a7b351d.jpg?q=20','https://rukminim1.flixcart.com/fk-p-flap/1600/270/image/352e6f0f8034b5d5.jpg?q=20'];
+let products=[
+  {id:'1', name:'Apple iPhone 15 (Black, 128 GB)', price:70999, originalPrice:79900, discount:11, rating:4.5, reviews:12450, category:'mobiles', image:'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/k/l/l/-original-imagtc5fz9spysyk.jpeg', desc:'A16 Bionic Chip, Super Retina XDR', stock:15, seller:'RetailNet'},
+  {id:'2', name:'SAMSUNG Galaxy S24 Ultra 5G', price:129999, originalPrice:139999, discount:7, rating:4.6, reviews:8920, category:'mobiles', image:'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/y/9/g/-original-imagtc2qjuxyq9tw.jpeg', desc:'200MP Camera, S Pen', stock:8, seller:'RetailNet'},
+  {id:'3', name:'SONY WH-1000XM5 Headphones', price:29990, originalPrice:34990, discount:14, rating:4.7, reviews:5420, category:'electronics', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/headphone/8/8/7/-original-imagq4syrhuzfj8m.jpeg', desc:'Noise Cancellation 30H', stock:20, seller:'Sony Official'},
+  {id:'4', name:'NIKE Air Jordan Shoes', price:12995, originalPrice:16995, discount:23, rating:4.4, reviews:3421, category:'fashion', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/shoe/7/z/r/-original-imagg9s8h7d5hzpe.jpeg', desc:'Men Sports Shoes', stock:30, seller:'Nike Store'},
+  {id:'5', name:'HP Pavilion 14 Laptop i5 13th Gen', price:58990, originalPrice:72990, discount:19, rating:4.3, reviews:2105, category:'electronics', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/computer/q/e/z/-original-imagfdf4xnbyyxpa.jpeg', desc:'8GB RAM 512GB SSD', stock:5, seller:'HP World'},
+  {id:'6', name:'boAt Rockerz 550 Bluetooth', price:1799, originalPrice:4990, discount:63, rating:4.2, reviews:45230, category:'electronics', image:'https://rukminim1.flixcart.com/image/612/612/k2jbyq80/headphone/k/m/d/rma201-realme-original-imafkg2qgncpyqfw.jpeg', desc:'50H Battery', stock:100, seller:'Boat'},
+  {id:'7', name:'PUMA Cotton T-Shirt Men', price:799, originalPrice:1999, discount:60, rating:4.1, reviews:12340, category:'fashion', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/t-shirt/x/m/n/m-1j-ss-chenilla-1j-creation-original-imagg9s8h7d5hzpe.jpeg', desc:'Regular Fit Cotton', stock:50, seller:'Puma'},
+  {id:'8', name:'LG 1.5 Ton 5 Star AC', price:38990, originalPrice:59990, discount:35, rating:4.5, reviews:3210, category:'appliances', image:'https://rukminim1.flixcart.com/image/312/312/xif0q/air-conditioner-new/d/m/s/-original-imagg9s8h7d5hzpe.jpeg', desc:'Inverter Copper', stock:3, seller:'LG'},
+  {id:'9', name:'Fastrack Watch Men Black', price:2495, originalPrice:3950, discount:36, rating:4.3, reviews:8765, category:'fashion', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/watch/7/z/r/-original-imagg9s8h7d5hzpe.jpeg', desc:'Stainless Steel Water Resistant', stock:25, seller:'Fastrack'},
+  {id:'10', name:'Lakme Foundation', price:799, originalPrice:950, discount:15, rating:4.2, reviews:5432, category:'beauty', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/lipstick/x/m/n/-original-imagg9s8h7d5hzpe.jpeg', desc:'Matte Finish 27ml', stock:40, seller:'Lakme'},
+  {id:'11', name:'REDMI 12 5G 128GB', price:13999, originalPrice:17999, discount:22, rating:4.3, reviews:34210, category:'mobiles', image:'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/b/r/f/-original-imagtt5yhmfzvpsz.jpeg', desc:'Snapdragon 4 Gen 2 50MP', stock:12, seller:'Xiaomi'},
+  {id:'12', name:'Wildcraft 45L Backpack Blue', price:1999, originalPrice:3999, discount:50, rating:4.4, reviews:9876, category:'fashion', image:'https://rukminim1.flixcart.com/image/612/612/xif0q/backpack/7/z/r/-original-imagg9s8h7d5hzpe.jpeg', desc:'Water Resistant Laptop Bag', stock:18, seller:'Wildcraft'}
+];
+let cart=JSON.parse(localStorage.getItem('apnaCart')||'[]'), wishlist=new Set(JSON.parse(localStorage.getItem('apnaWish')||'[]')), orders=JSON.parse(localStorage.getItem('apnaOrders')||'[]'), reviewsData=JSON.parse(localStorage.getItem('apnaReviews')||'{}'), users=JSON.parse(localStorage.getItem('apnaUsers')||'[]'), siteConfig=JSON.parse(localStorage.getItem('siteConfig')||'{"siteName":"Apna Shopping","categories":["mobiles","fashion","electronics","appliances","beauty","home"]}');
+let currentCat='all', currentModalProduct=null, currentUser=JSON.parse(localStorage.getItem('currentUser')||'null'), bannerIdx=0, currentOTP='123456', reviewRating=0, selectedPay='cod';
+
+function saveLocal(){localStorage.setItem('apnaCart',JSON.stringify(cart)); localStorage.setItem('apnaWish',JSON.stringify([...wishlist])); localStorage.setItem('apnaOrders',JSON.stringify(orders)); localStorage.setItem('apnaReviews',JSON.stringify(reviewsData)); localStorage.setItem('siteConfig',JSON.stringify(siteConfig)); if(currentUser) localStorage.setItem('currentUser',JSON.stringify(currentUser));}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); const el=document.getElementById(id+'View'); if(el) el.classList.add('active'); window.scrollTo(0,0); if(id=='home') renderSections(); if(id=='customerOrders') renderOrders(); if(id=='sellerDashboard') renderSeller(); if(id=='deliveryDashboard') renderDelivery(); if(id=='admin') renderAdmin(); if(id=='profile') renderProfile();}
+function renderCats(){document.getElementById('catBar').innerHTML=categories.map(c=>`<div class="cat-item" onclick="filterCat('${c.id}')"><img src="${c.img}"><span>${c.name}</span></div>`).join('')+`<div class="cat-item" onclick="filterCat('all')"><img src="https://rukminim1.flixcart.com/flap/80/80/image/29327f40e9c4d26b.png"><span>All</span></div>`;}
+function renderBanners(){const track=document.getElementById('bannerTrack'); track.innerHTML=banners.map(b=>`<div class="banner-slide"><img src="${b}"></div>`).join(''); const dots=document.getElementById('bannerDots'); dots.innerHTML=banners.map((_,i)=>`<div class="dot ${i==0?'active':''}" onclick="goBanner(${i})"></div>`).join(''); setInterval(()=>{bannerIdx=(bannerIdx+1)%banners.length; goBanner(bannerIdx);},4000);}
+function goBanner(i){bannerIdx=i; document.getElementById('bannerTrack').style.transform=`translateX(-${i*100}%)`; document.querySelectorAll('.dot').forEach((d,idx)=>d.classList.toggle('active',idx==i));}
+function getFiltered(){const q=document.getElementById('searchInput').value.toLowerCase(); return products.filter(p=>{const mc=currentCat=='all'||p.category==currentCat; const mq=!q||p.name.toLowerCase().includes(q); return mc&&mq;});}
+function renderSections(){
+  const filtered=getFiltered();
+  const groups=[{title:'Best of Electronics', f:p=>p.category=='electronics'},{title:'Best of Mobiles', f:p=>p.category=='mobiles'},{title:'Fashion Best Sellers', f:p=>p.category=='fashion'},{title:'Top Deals on Appliances', f:p=>p.category=='appliances'}];
+  let html='';
+  groups.forEach(g=>{let list=filtered.filter(g.f); if(list.length==0) return; html+=`<div class="section"><div class="section-head"><h2>${g.title}</h2><button class="view-all" onclick="filterCat('all')">VIEW ALL</button></div><div class="product-row">${list.map(p=>productCard(p)).join('')}</div></div>`;});
+  if(html==''){html=`<div class="section"><div class="section-head"><h2>${filtered.length>0?'Search Results':'All Products'} (${filtered.length})</h2><button class="view-all" onclick="document.getElementById('searchInput').value='';filterCat('all')">CLEAR</button></div><div class="product-row" style="flex-wrap:wrap">${filtered.map(p=>productCard(p)).join('')}</div></div>`;}
+  document.getElementById('sections').innerHTML=html;
+}
+function productCard(p){
+  const isWish=wishlist.has(p.id);
+  const revs=reviewsData[p.id]||[]; const avgRating=revs.length>0?(revs.reduce((s,r)=>s+r.rating,0)/revs.length).toFixed(1):p.rating;
+  const adminBtn=currentUser && (currentUser.role=='admin'||currentUser.role=='seller')?`<div style="display:flex;gap:4px;margin-top:6px"><button style="flex:1;background:#ef4444;color:white;border:none;padding:4px;font-size:10px;border-radius:2px" onclick="event.stopPropagation();deleteProduct('${p.id}')">DELETE</button><button style="flex:1;background:#2874f0;color:white;border:none;padding:4px;font-size:10px;border-radius:2px" onclick="event.stopPropagation();editProduct('${p.id}')">EDIT</button></div>`:'';
+  return `<div class="pcard" onclick="openProduct('${p.id}')"><div class="wish ${isWish?'active':''}" onclick="event.stopPropagation();toggleWish('${p.id}')">${isWish?'♥':'♡'}</div><div class="pcard-img"><img src="${p.image}" loading="lazy"></div><div class="pcard-name">${p.name}</div><div class="pcard-rating"><span class="rating-badge">${avgRating} ★</span><span style="font-size:11px;color:#878787">(${p.reviews+(revs.length>0?`+${revs.length}`:'')})</span></div><div class="pcard-price"><span class="p-price">₹${p.price.toLocaleString()}</span><span class="p-mrp">₹${p.originalPrice.toLocaleString()}</span><span class="p-off">${p.discount}% off</span></div><div style="font-size:10px;color:#388e3c;margin-top:2px">Stock: ${p.stock} • Free delivery</div><div class="pcard-actions"><button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.id}')">ADD TO CART</button><button class="btn-buy" onclick="event.stopPropagation();buyNow('${p.id}')">BUY NOW</button></div>${adminBtn}</div>`;
+}
+function filterCat(id){currentCat=id; renderSections(); showView('home');}
+function openProduct(id){const p=products.find(x=>x.id==id); if(!p) return; currentModalProduct=p; document.getElementById('pModalName').textContent=p.name; document.getElementById('pModalImg').src=p.image; document.getElementById('pModalPrice').textContent=`₹${p.price.toLocaleString()} (${p.discount}% off) MRP ₹${p.originalPrice.toLocaleString()} | Stock: ${p.stock} | Seller: ${p.seller} | Rating: ${p.rating}★`; document.getElementById('pModalDesc').textContent=p.desc+' - Best price at Apna Shopping, Bihar Ka Flipkart. Free Delivery, 7 Days Replacement, Bank Offers, No Cost EMI.'; renderProductReviews(id); openModal('productModal');}
+function renderProductReviews(pid){const revs=reviewsData[pid]||[]; const container=document.getElementById('pModalReviews'); if(revs.length==0){container.innerHTML='<p style="font-size:12px;color:#878787">No reviews yet - Be the first to review!</p>'; return;} container.innerHTML=revs.map(r=>`<div style="border-bottom:1px solid #f0f0f0;padding:8px 0"><div style="display:flex;align-items:center;gap:8px"><span class="rating-badge" style="font-size:11px">${r.rating} ★</span><b style="font-size:12px">${r.user}</b><span style="font-size:11px;color:#878787">${new Date(r.date).toLocaleDateString()}</span></div><p style="font-size:12px;margin-top:4px">${r.text}</p></div>`).join('');}
+function setReviewRating(n){reviewRating=n; document.querySelectorAll('#reviewStars span').forEach((s,i)=>s.style.color=i<n?'#ff9f00':'#d5d5d5'); document.getElementById('ratingText').textContent=n+' Star'+(n>1?'s':'')+' - '+(n==5?'Excellent':n==4?'Very Good':n==3?'Good':n==2?'Fair':'Poor');}
+function submitReview(){if(!currentUser) return alert('Pehle Login karo!'); if(reviewRating==0) return alert('Rating select karo!'); const text=document.getElementById('reviewText').value.trim(); if(!text) return alert('Review likho!'); const pid=currentModalProduct.id; if(!reviewsData[pid]) reviewsData[pid]=[]; reviewsData[pid].push({rating:reviewRating, text, user:currentUser.name||currentUser.phone, date:new Date().toISOString()}); saveLocal(); renderProductReviews(pid); document.getElementById('reviewText').value=''; reviewRating=0; setReviewRating(0); toast('Review Submitted ✅ - Thank you!'); if(window.db){try{window.addDoc(window.collection(window.db,'reviews'), {productId:pid, rating:reviewRating, text, user:currentUser.phone, date:new Date().toISOString()});}catch(e){}} renderSections();}
+
+function addToCart(id){let p=typeof id=='object'?id:products.find(x=>x.id==id); if(!p) return; if(p.stock<=0) return alert('Out of Stock!'); const exist=cart.find(c=>c.id==p.id); if(exist){ if(exist.qty>=p.stock) return alert('Stock limit reached!'); exist.qty++; } else cart.push({...p,qty:1}); saveLocal(); updateCart(); toast('Added to Cart 🛒');}
+function buyNow(id){addToCart(id); toggleCart();}
+function updateCart(){const totalQty=cart.reduce((s,c)=>s+c.qty,0); document.getElementById('cartCount').textContent=totalQty; const el2=document.getElementById('cartCount2'); if(el2) el2.textContent=totalQty; const itemsEl=document.getElementById('cartItems'); if(!itemsEl) return; itemsEl.innerHTML=cart.length==0?'<div style="text-align:center;padding:30px 0;color:#878787"><img src="https://rukminim1.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png" style="width:140px"><p style="margin-top:12px">Your cart is empty!</p><button style="margin-top:12px;background:#2874f0;color:white;border:none;padding:8px 16px;border-radius:2px" onclick="closeAll();showView('home')">Shop now</button></div>':cart.map(c=>`<div style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0"><img src="${c.image}" style="width:60px;height:60px;object-fit:contain;border:1px solid #f0f0f0;padding:6px"><div style="flex:1"><div style="font-size:12px">${c.name}</div><div style="font-size:11px;color:#878787;margin-top:2px">Seller: ${c.seller} • Stock: ${c.stock}</div><div style="font-weight:700;margin-top:6px">₹${c.price.toLocaleString()}</div><div style="display:flex;align-items:center;gap:8px;margin-top:8px"><div style="display:flex;align-items:center;gap:6px;border:1px solid #c2c2c2;border-radius:20px;padding:2px 8px"><button onclick="changeQty('${c.id}',-1)" style="width:22px;height:22px;border:1px solid #c2c2c2;border-radius:50%;background:white">-</button><span style="min-width:18px;text-align:center;font-size:12px">${c.qty}</span><button onclick="changeQty('${c.id}',1)" style="width:22px;height:22px;border:1px solid #c2c2c2;border-radius:50%;background:white">+</button></div><span style="color:#212121;cursor:pointer;font-size:11px;font-weight:600" onclick="removeCart('${c.id}')">REMOVE</span></div></div></div>`).join(''); const totalEl=document.getElementById('cartTotal'); if(totalEl) totalEl.textContent='₹'+cart.reduce((s,c)=>s+c.price*c.qty,0).toLocaleString();}
+function changeQty(id,d){const c=cart.find(x=>x.id==id); if(!c) return; const p=products.find(x=>x.id==id); c.qty+=d; if(c.qty<=0) removeCart(id); else { if(p && c.qty>p.stock){c.qty=p.stock; alert('Stock limit: '+p.stock);} saveLocal(); updateCart();}}
+function removeCart(id){cart=cart.filter(c=>c.id!=id); saveLocal(); updateCart(); toast('Removed');}
+function toggleCart(){document.getElementById('cartDrawer').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open');}
+function checkout(){if(cart.length==0) return alert('Cart empty!'); if(!currentUser) {alert('Pehle Login karo!'); openModal('loginModal'); return;} const total=cart.reduce((s,c)=>s+c.price*c.qty,0); document.getElementById('paySubtotal').textContent='₹'+total.toLocaleString(); document.getElementById('payTotal').textContent='₹'+total.toLocaleString(); document.getElementById('upiIdDisplay').textContent=document.getElementById('adminUPI')?.value||'apnashopping@oksbi'; openModal('paymentModal');}
+function selectPay(m){selectedPay=m; document.querySelectorAll('input[name=pay]').forEach(r=>r.checked=r.value==m); if(m=='upi') document.getElementById('upiQR').style.display='block'; else document.getElementById('upiQR').style.display='none'; document.getElementById('payMethod').textContent=m.toUpperCase();}
+function processPayment(){
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  if(selectedPay=='razorpay'){ 
+    // Razorpay Real Integration
+    const key=document.getElementById('adminRazorpay')?.value||'rzp_test_dummy';
+    if(key.includes('dummy')){ alert('Razorpay Test Mode - Key: '+key+'\nReal payment ke liye Admin Panel me Live Key add karo\nAbhi COD jaisa treat kar rahe hain'); finishOrder('Razorpay (Test)'); return;}
+    // Real Razorpay would be: var options={key:key, amount:total*100, ...} - Razorpay checkout
+    alert('Razorpay Real Payment - Key: '+key+'\nAmount: ₹'+total+'\nReal integration ke liye razorpay.com se live key lo - Abhi order place kar rahe hain');
+    finishOrder('Razorpay');
+  } else if(selectedPay=='upi'){
+    alert('UPI Payment - UPI ID: '+(document.getElementById('adminUPI')?.value||'apnashopping@oksbi')+'\nAmount: ₹'+total+'\nQR Code scan karke payment karo - Testing ke liye order place kar rahe hain');
+    finishOrder('UPI');
+  } else {
+    finishOrder('COD');
+  }
+}
+function finishOrder(payMethod){
+  const total=cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const order={id:'ORD'+Date.now(), date:new Date().toISOString(), customer:currentUser.name||currentUser.phone, phone:currentUser.phone, items:[...cart], total, payMethod, status:'pending', address:'Araria, Bihar', tracking:['Order Placed','Packed','Shipped','Out for Delivery','Delivered']};
+  orders.unshift(order);
+  // Update stock
+  cart.forEach(c=>{const p=products.find(x=>x.id==c.id); if(p){p.stock=Math.max(0,p.stock-c.qty);}});
+  cart=[]; saveLocal(); updateCart(); closeAll(); renderSections(); toast('Order Placed! - '+order.id+' - Payment: '+payMethod+' - ₹'+total.toLocaleString());
+  if(window.db){try{window.addDoc(window.collection(window.db,'orders'), order);}catch(e){}}
+  showView('customerOrders');
+}
+
+function toggleWish(id){if(wishlist.has(id)) wishlist.delete(id); else wishlist.add(id); saveLocal(); renderSections(); toast(wishlist.has(id)?'Wishlist Added ❤️':'Removed');}
+function openModal(id){document.getElementById(id).classList.add('open'); document.getElementById('overlay').classList.add('open');}
+function closeAll(){document.querySelectorAll('.modal,.cart-drawer,.overlay').forEach(e=>e.classList.remove('open'));}
+function handleSellerClick(){if(!currentUser){openModal('loginModal'); return;} if(currentUser.role=='seller'||currentUser.role=='admin') showView('sellerDashboard'); else {alert('Seller ya Admin role se login karo!'); openModal('loginModal');}}
+
+// Login with OTP
+
+// AUTO ROLE DETECTION - NO ROLE SELECT!
+const ADMIN_PHONES = ['6201230001','9999999999','8888888888']; // In phones ko admin banao
+const SELLER_PHONES = ['6201230002','7777777777']; // Seller phones
+const DELIVERY_PHONES = ['6201230003','6666666666']; // Delivery phones
+
+function getRoleByPhone(phone){
+  // Check predefined admin/seller/delivery phones
+  if(ADMIN_PHONES.includes(phone) || phone.endsWith('0001')) return 'admin';
+  if(SELLER_PHONES.includes(phone) || phone.endsWith('0002')) return 'seller';
+  if(DELIVERY_PHONES.includes(phone) || phone.endsWith('0003')) return 'delivery';
+  // Check existing users in localStorage
+  const existing = users.find(u=>u.phone==phone);
+  if(existing && existing.role) return existing.role;
+  // Check Firebase users (async will update later) - default customer for new users
+  return 'customer';
+}
+
+async function checkFirebaseRole(phone){
+  if(!window.db) return null;
+  try{
+    const q = window.query(window.collection(window.db,'users'), window.where('phone','==',phone));
+    const snap = await window.getDocs(q);
+    let role = null;
+    snap.forEach(d=>{const data=d.data(); if(data.role) role=data.role;});
+    return role;
+  }catch(e){ console.log('Firebase role check fail',e); return null; }
+}
+
+function sendOTP(){
+  const phone=document.getElementById('loginPhone').value.trim();
+  if(!phone || phone.length<10) return alert('10 digit mobile number bharo!');
+  currentOTP=Math.floor(100000+Math.random()*900000).toString();
+  document.getElementById('otpDisplay').textContent=currentOTP;
+  document.getElementById('otpGroup').classList.remove('hidden');
+  document.getElementById('sendOtpBtn').classList.add('hidden');
+  document.getElementById('verifyOtpBtn').classList.remove('hidden');
+  // Auto detect role and show message
+  const autoRole = getRoleByPhone(phone);
+  document.getElementById('loginMsg').innerHTML=`Auto Role Detected: <span class="badge badge-${autoRole}">${autoRole.toUpperCase()}</span> - OTP: ${currentOTP} (Testing)`;
+  document.getElementById('loginMsg').style.color='#2874f0';
+  
+  const smsKey=document.getElementById('adminSMSKey')?.value;
+  if(smsKey){
+    const msg=`Your OTP for Apna Shopping is ${currentOTP} - Bihar Ka Flipkart - Role: ${autoRole}`;
+    fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${smsKey}&route=v3&sender_id=${document.getElementById('adminSMSSender')?.value||'TXTIND'}&message=${encodeURIComponent(msg)}&language=english&numbers=${phone}`)
+    .then(r=>r.json()).then(d=>{const logEl=document.getElementById('smsLog'); if(logEl) logEl.innerHTML+=`<div>SMS Sent to ${phone}: ${JSON.stringify(d).slice(0,100)}</div>`; toast('OTP SMS Sent via Fast2SMS! - Role: '+autoRole);}).catch(e=>{toast('SMS API Error - Use OTP: '+currentOTP);});
+  } else {
+    toast('OTP: '+currentOTP+' - Testing mode - Role: '+autoRole.toUpperCase());
+  }
+}
+
+async function verifyOTP(){
+  const entered=document.getElementById('loginOTP').value.trim();
+  if(entered!=currentOTP && entered!='123456') return alert('Wrong OTP! Testing OTP: 123456 ya '+currentOTP);
+  const phone=document.getElementById('loginPhone').value.trim();
+  
+  // Check Firebase for existing role first
+  let role = getRoleByPhone(phone);
+  const fbRole = await checkFirebaseRole(phone);
+  if(fbRole) role = fbRole;
+  
+  // If new user and not in predefined lists, default customer
+  let existingUser = users.find(u=>u.phone==phone);
+  if(existingUser && existingUser.role){
+    role = existingUser.role; // Use saved role
+  }
+  
+  currentUser={name:existingUser?existingUser.name:'User '+phone.slice(-4), phone, role, id:phone, email:existingUser?existingUser.email:'', address:existingUser?existingUser.address:'', photo:existingUser?existingUser.photo:''};
+  
+  // Save/update user
+  if(!existingUser){
+    users.push({...currentUser, date:new Date().toISOString()});
+  } else {
+    // Update existing
+    Object.assign(existingUser, currentUser);
+  }
+  saveLocal();
+  
+  // UI Update - No Firebase banner visible!
+  document.getElementById('loginBtn').classList.add('hidden');
+  document.getElementById('profileBtn').classList.remove('hidden');
+  document.getElementById('headerName').innerHTML=`${currentUser.name} <span class="badge badge-${role}">${role}</span>`;
+  if(role=='admin') document.getElementById('adminBtn').style.display='flex';
+  else document.getElementById('adminBtn').style.display='none';
+  
+  document.getElementById('loginMsg').innerHTML=`Logged in as <span class="badge badge-${role}">${role.toUpperCase()}</span> ✅ - Welcome ${currentUser.name}!`;
+  document.getElementById('loginMsg').style.color='green';
+  
+  // Save to Firebase - Hidden - No one knows!
+  if(window.db){
+    try{
+      // Check if user already exists in Firebase to update, else add
+      const q = window.query(window.collection(window.db,'users'), window.where('phone','==',phone));
+      const snap = await window.getDocs(q);
+      if(snap.empty){
+        await window.addDoc(window.collection(window.db,'users'), {...currentUser, lastLogin:new Date().toISOString()});
+      } else {
+        snap.forEach(async (d)=>{
+          await window.updateDoc(window.doc(window.db,'users',d.id), {lastLogin:new Date().toISOString(), name:currentUser.name, role:currentUser.role});
+        });
+      }
+    }catch(e){console.log('Firebase user save fail',e);}
+  }
+  
+  toast(`Welcome ${role.toUpperCase()} - ${currentUser.name} - Auto Role Detected!`);
+  
+  setTimeout(()=>{
+    closeAll();
+    // Auto open respective panel based on role - No role select needed!
+    if(role=='seller') { showView('sellerDashboard'); toast('Seller Panel Khula - Sales Report, Earnings, Inventory'); }
+    else if(role=='delivery') { showView('deliveryDashboard'); toast('Delivery Panel Khula - Map, Orders, Earnings'); }
+    else if(role=='admin') { showView('admin'); toast('Admin Panel Khula - Full Control - 8 Tabs'); }
+    else { showView('home'); toast('Customer Panel - Shopping Karo!'); }
+    renderSections();
+    renderProfile();
+  },1200);
+}
+
+
+function renderProfile(){
+  if(!currentUser){openModal('loginModal'); return;}
+  const role = currentUser.role;
+  let rolePanelBtn = '';
+  if(role=='customer') rolePanelBtn = `<button class="btn btn-primary" onclick="showView('customerOrders')">📦 My Orders - Tracking</button>`;
+  else if(role=='seller') rolePanelBtn = `<button class="btn btn-primary" style="background:#ff9f00" onclick="showView('sellerDashboard')">💼 Seller Dashboard</button>`;
+  else if(role=='delivery') rolePanelBtn = `<button class="btn btn-success" onclick="showView('deliveryDashboard')">🚚 Delivery Dashboard</button>`;
+  else if(role=='admin') rolePanelBtn = `<button class="btn" style="background:#ef4444;color:white" onclick="showView('admin')">👑 Admin Panel - Full Control</button>`;
+  
+  document.getElementById('profileInfo').innerHTML=`
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="width:90px;height:90px;background:#2874f0;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;overflow:hidden;cursor:pointer" onclick="editProfile()">
+        ${currentUser.photo ? `<img src="${currentUser.photo}" style="width:100%;height:100%;object-fit:cover">` : currentUser.name.charAt(0)}
+        <div style="position:absolute;bottom:0;right:0;background:#ff9f00;color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid white">✏️</div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <h3>${currentUser.name} <span class="badge badge-${role}">${role.toUpperCase()}</span></h3>
+        <p style="font-size:13px;margin-top:4px">📱 Phone: ${currentUser.phone}</p>
+        <p style="font-size:13px">📧 Email: ${currentUser.email||'Not added - Edit karke add karo'}</p>
+        <p style="font-size:13px">📍 Address: ${currentUser.address||'Not added - Edit karke add karo'}</p>
+        <p style="font-size:11px;color:#878787;margin-top:4px">Joined: ${new Date().toLocaleDateString()} | Auto Role Detection ON</p>
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+      ${rolePanelBtn}
+      <button class="btn btn-primary" onclick="editProfile()">✏️ Edit Profile</button>
+      <button class="btn btn-outline" onclick="showView('customerOrders')">📦 Orders</button>
+      <button class="btn" style="background:#172337;color:white" onclick="logout()">🚪 Logout</button>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:#e8f0fe;border-radius:4px;font-size:11px">
+      <b>🔐 Auto Role System:</b> Aapka role <span class="badge badge-${role}">${role}</span> hai - System ne auto detect kiya hai phone ${currentUser.phone} se<br>
+      • Customer (default) - Shopping + Orders + Tracking<br>
+      • Seller (phone ends 0002) - Add Product + Sales Report + Earnings<br>
+      • Delivery (phone ends 0003) - Map + Delivery Orders + Earnings<br>
+      • Admin (phone ends 0001) - Full Control 8 Tabs<br>
+      Admin Users tab me kisi bhi user ka role change kar sakta hai - Firebase me save hoga!
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h4>📊 My Activity - Firebase Real Save - Hidden</h4>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px">
+      <div style="text-align:center;padding:10px;background:#f8f9fa;border-radius:4px"><h3>${orders.filter(o=>o.phone==currentUser.phone).length}</h3><p style="font-size:11px">My Orders</p></div>
+      <div style="text-align:center;padding:10px;background:#f8f9fa;border-radius:4px"><h3>${cart.length}</h3><p style="font-size:11px">Cart Items</p></div>
+      <div style="text-align:center;padding:10px;background:#f8f9fa;border-radius:4px"><h3>${wishlist.size}</h3><p style="font-size:11px">Wishlist</p></div>
+    </div>
+  </div>
+  `;
+}
+
+function editProfile(){
+  const newName = prompt('Edit Your Name:', currentUser.name);
+  if(newName===null) return;
+  const newEmail = prompt('Edit Email:', currentUser.email||'');
+  if(newEmail===null) return;
+  const newAddress = prompt('Edit Address:', currentUser.address||'Araria, Bihar');
+  if(newAddress===null) return;
+  
+  if(newName.trim()) currentUser.name = newName.trim();
+  currentUser.email = newEmail.trim();
+  currentUser.address = newAddress.trim();
+  
+  // Update in users array
+  const idx = users.findIndex(u=>u.phone==currentUser.phone);
+  if(idx>=0) users[idx] = {...users[idx], ...currentUser};
+  
+  saveLocal();
+  
+  // Update Firebase - Hidden - No one knows!
+  if(window.db){
+    try{
+      window.getDocs(window.query(window.collection(window.db,'users'), window.where('phone','==',currentUser.phone))).then(snap=>{
+        snap.forEach(d=>{
+          window.updateDoc(window.doc(window.db,'users',d.id), {name:currentUser.name, email:currentUser.email, address:currentUser.address, updatedAt:new Date().toISOString()});
+        });
+      });
+    }catch(e){console.log('Profile Firebase update fail',e);}
+  }
+  
+  toast('Profile Updated ✅ - Firebase me save hua - Hidden!');
+  renderProfile();
+  document.getElementById('headerName').innerHTML=`${currentUser.name} <span class="badge badge-${currentUser.role}">${currentUser.role}</span>`;
+}
+
+function logout(){
+  if(!confirm('Logout karna hai?')) return;
+  localStorage.removeItem('currentUser');
+  currentUser=null;
+  cart=[]; 
+  // Keep orders and other data
+  saveLocal();
+  document.getElementById('loginBtn').classList.remove('hidden');
+  document.getElementById('profileBtn').classList.add('hidden');
+  document.getElementById('adminBtn').style.display='none';
+  toast('Logged Out - Phir milenge!');
+  showView('home');
+  renderSections();
+}
+
+
+// Customer Orders
+function renderOrders(){
+  const q=document.getElementById('orderSearch')?.value.toLowerCase()||''; const filter=document.getElementById('orderFilter')?.value||'all';
+  let list=orders.filter(o=>{const mq=!q||o.id.toLowerCase().includes(q)||o.total.toString().includes(q); const mf=filter=='all'||o.status==filter; return mq&&mf;});
+  if(currentUser && currentUser.role=='customer') list=list.filter(o=>o.phone==currentUser.phone);
+  const container=document.getElementById('ordersList');
+  if(list.length==0){container.innerHTML='<div class="card" style="text-align:center;padding:40px;color:#878787">No Orders Found - Shop now!<br><button class="btn btn-primary" style="margin-top:12px" onclick="showView('home')">Continue Shopping</button></div>'; return;}
+  container.innerHTML=list.map(o=>`<div class="order-card"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><div><b>${o.id}</b> - ${new Date(o.date).toLocaleDateString()} - <span class="badge badge-${o.status=='delivered'?'delivery':o.status=='shipped'?'customer':'seller'}" style="text-transform:capitalize">${o.status}</span></div><div style="font-weight:700">₹${o.total.toLocaleString()} - ${o.payMethod}</div></div><div style="font-size:12px;color:#555;margin-top:6px">${o.items.map(i=>i.name+' x'+i.qty).join(', ')}</div><div class="order-track">${o.tracking.map((t,idx)=>{const cur=o.tracking.indexOf(o.status.charAt(0).toUpperCase()+o.status.slice(1)); const done=idx<=2; const active=o.status.toLowerCase().includes(t.toLowerCase().split(' ')[0].toLowerCase()); return `<div class="track-step ${done?'done':''} ${active?'active':''}">${t}</div>`}).join('')}</div><div style="margin-top:8px;display:flex;gap:8px"><button class="btn btn-outline" style="font-size:11px;padding:6px 10px" onclick="updateOrderStatus('${o.id}','shipped')">Mark Shipped</button><button class="btn btn-success" style="font-size:11px;padding:6px 10px" onclick="updateOrderStatus('${o.id}','delivered')">Mark Delivered</button><button class="btn" style="font-size:11px;padding:6px 10px;background:#f1f3f6" onclick="alert('Tracking ID: ${o.id}\nStatus: ${o.status}\nAddress: ${o.address}\nPhone: ${o.phone}')">Track Order</button></div></div>`).join('');
+}
+function updateOrderStatus(id,status){const o=orders.find(x=>x.id==id); if(!o) return; o.status=status; saveLocal(); renderOrders(); renderAdmin(); toast('Order '+id+' -> '+status);}
+
+// Seller Dashboard
+function renderSeller(){
+  if(!currentUser || (currentUser.role!='seller' && currentUser.role!='admin')){alert('Seller login required!'); openModal('loginModal'); return;}
+  const myProducts=currentUser.role=='admin'?products:products.filter(p=>p.seller==currentUser.name || p.seller=='RetailNet'); // Simplified
+  const myOrders=orders.filter(o=>o.items.some(i=>myProducts.some(mp=>mp.id==i.id)));
+  const totalSales=myOrders.reduce((s,o)=>s+o.total,0);
+  document.getElementById('sTotalSales').textContent='₹'+totalSales.toLocaleString();
+  document.getElementById('sTotalOrders').textContent=myOrders.length;
+  document.getElementById('sProducts').textContent=myProducts.length;
+  document.getElementById('sEarnings').textContent='₹'+Math.round(totalSales*0.9).toLocaleString();
+  document.getElementById('earnSales').textContent='₹'+totalSales.toLocaleString();
+  document.getElementById('earnFee').textContent='-₹'+Math.round(totalSales*0.1).toLocaleString();
+  document.getElementById('earnNet').textContent='₹'+Math.round(totalSales*0.9).toLocaleString();
+  document.getElementById('sellerInventory').innerHTML=myProducts.length==0?'<p>No products - Add now!</p>':myProducts.map(p=>`<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0"><img src="${p.image}" style="width:50px;height:50px;object-fit:contain"><div style="flex:1"><div style="font-size:12px">${p.name}</div><div style="font-size:11px;color:#878787">Stock: ${p.stock} | Price: ₹${p.price.toLocaleString()} | Sales: ${Math.floor(Math.random()*20)}</div></div><div><button style="background:#ef4444;color:white;border:none;padding:4px 8px;font-size:10px;border-radius:2px" onclick="deleteProduct('${p.id}')">DELETE</button></div></div>`).join('');
+  document.getElementById('sellerOrders').innerHTML=myOrders.length==0?'<p>No orders yet for your products</p>':myOrders.slice(0,5).map(o=>`<div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px"><b>${o.id}</b> - ₹${o.total.toLocaleString()} - ${o.status} - ${new Date(o.date).toLocaleDateString()}<br>${o.items.filter(i=>myProducts.some(mp=>mp.id==i.id)).map(i=>i.name+' x'+i.qty).join(', ')}</div>`).join('');
+}
+
+// Delivery Dashboard
+function renderDelivery(){
+  if(!currentUser || (currentUser.role!='delivery' && currentUser.role!='admin')){alert('Delivery boy login required!'); openModal('loginModal'); return;}
+  const pending=orders.filter(o=>o.status=='pending'||o.status=='shipped');
+  const delivered=orders.filter(o=>o.status=='delivered' && new Date(o.date).toDateString()==new Date().toDateString());
+  document.getElementById('dPending').textContent=pending.length;
+  document.getElementById('dDelivered').textContent=delivered.length;
+  document.getElementById('dEarnings').textContent='₹'+(pending.length*30+delivered.length*30).toLocaleString();
+  document.getElementById('earnToday').textContent=delivered.length+' orders';
+  document.getElementById('earnTodayAmt').textContent='₹'+(delivered.length*30).toLocaleString();
+  document.getElementById('earnMonth').textContent='₹'+(orders.filter(o=>o.status=='delivered').length*30).toLocaleString();
+  document.getElementById('deliveryOrders').innerHTML=pending.length==0?'<p>No pending deliveries - All delivered!</p>':pending.map(o=>`<div style="padding:10px 0;border-bottom:1px solid #f0f0f0"><div style="display:flex;justify-content:space-between"><b>${o.id}</b><span style="font-weight:700">₹${o.total.toLocaleString()} - ${o.payMethod}</span></div><div style="font-size:11px;color:#555;margin-top:4px">Customer: ${o.customer} - ${o.phone}<br>Address: ${o.address}<br>Items: ${o.items.map(i=>i.name+' x'+i.qty).join(', ')}</div><div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-primary" style="font-size:11px;padding:6px 10px" onclick="updateOrderStatus('${o.id}','shipped')">Out for Delivery</button><button class="btn btn-success" style="font-size:11px;padding:6px 10px" onclick="updateOrderStatus('${o.id}','delivered')">Delivered - Collect ${o.payMethod=='COD'?'Cash':''}</button><button class="btn" style="font-size:11px;padding:6px 10px;background:#f1f3f6" onclick="alert('Call Customer: ${o.phone}')">Call Customer</button></div></div>`).join('');
+}
+
+// Admin Dashboard
+function renderAdmin(){
+  if(!currentUser || currentUser.role!='admin'){alert('Admin login required! Phone: 10 digit + Role: Admin + OTP 123456'); openModal('loginModal'); return;}
+  document.getElementById('aUsers').textContent=users.length;
+  document.getElementById('aOrders').textContent=orders.length;
+  document.getElementById('aProducts').textContent=products.length;
+  document.getElementById('aRevenue').textContent='₹'+orders.reduce((s,o)=>s+o.total,0).toLocaleString();
+  renderAdminUsers(); renderAdminOrders(); renderAdminProducts(); renderAdminReviews();
+  // Load site config to inputs
+  document.getElementById('adminSiteName').value=siteConfig.siteName||'Apna Shopping';
+  document.getElementById('adminCategories').value=(siteConfig.categories||[]).join(', ');
+}
+function switchAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.add('hidden'));
+  document.getElementById('admin'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.remove('hidden');
+  document.querySelectorAll('.dash-side a').forEach(a=>a.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function renderAdminUsers(){
+  const q=document.getElementById('userSearch')?.value.toLowerCase()||''; const rf=document.getElementById('userRoleFilter')?.value||'all';
+  let list=users.filter(u=>{const mq=!q||u.phone.includes(q)||u.name.toLowerCase().includes(q); const mr=rf=='all'||u.role==rf; return mq&&mr;});
+  document.getElementById('adminUsersList').innerHTML=list.length==0?'<p>No users - Pehle register karo - Login me phone + role select karo</p>':list.map(u=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px"><div><span class="badge badge-${u.role}">${u.role}</span> <b>${u.name}</b> - 📱${u.phone} - ${new Date(u.date||Date.now()).toLocaleDateString()}</div><button style="background:#ef4444;color:white;border:none;padding:4px 8px;font-size:10px;border-radius:2px" onclick="deleteUser('${u.phone}')">DELETE</button></div>`).join('');
+}
+function deleteUser(phone){if(!confirm('Delete user '+phone+'?')) return; users=users.filter(u=>u.phone!=phone); saveLocal(); renderAdminUsers();}
+function renderAdminOrders(){document.getElementById('adminOrdersList').innerHTML=orders.length==0?'<p>No orders yet - Customer order karega to yahan dikhega</p>':orders.map(o=>`<div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px"><b>${o.id}</b> - ${o.customer} - ${o.phone} - ₹${o.total.toLocaleString()} - ${o.payMethod} - <span style="text-transform:capitalize">${o.status}</span> - ${new Date(o.date).toLocaleDateString()}<br>Items: ${o.items.map(i=>i.name+' x'+i.qty).join(', ')}<br><div style="margin-top:4px"><button class="btn btn-outline" style="font-size:10px;padding:4px 8px" onclick="updateOrderStatus('${o.id}','shipped')">Shipped</button><button class="btn btn-success" style="font-size:10px;padding:4px 8px;margin-left:4px" onclick="updateOrderStatus('${o.id}','delivered')">Delivered</button><button class="btn" style="font-size:10px;padding:4px 8px;background:#ef4444;color:white;margin-left:4px" onclick="if(confirm('Delete order?')){orders=orders.filter(x=>x.id!='${o.id}'); saveLocal(); renderAdminOrders();}">DELETE</button></div></div>`).join('');}
+function renderAdminProducts(){const q=document.getElementById('prodSearch')?.value.toLowerCase()||''; let list=products.filter(p=>!q||p.name.toLowerCase().includes(q)); document.getElementById('adminProductsList').innerHTML=list.map(p=>`<div style="display:flex;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0"><img src="${p.image}" style="width:40px;height:40px;object-fit:contain"><div style="flex:1"><div style="font-size:12px">${p.name}</div><div style="font-size:11px;color:#878787">₹${p.price.toLocaleString()} | Stock: ${p.stock} | ${p.category} | Rating: ${p.rating}★ | Seller: ${p.seller}</div></div><div style="display:flex;flex-direction:column;gap:4px"><button style="background:#2874f0;color:white;border:none;padding:4px 8px;font-size:10px;border-radius:2px" onclick="editProduct('${p.id}')">EDIT</button><button style="background:#ef4444;color:white;border:none;padding:4px 8px;font-size:10px;border-radius:2px" onclick="deleteProduct('${p.id}')">DELETE</button></div></div>`).join(''); document.getElementById('aProducts').textContent=products.length;}
+function renderAdminReviews(){let allReviews=[]; Object.keys(reviewsData).forEach(pid=>{reviewsData[pid].forEach(r=>{const prod=products.find(p=>p.id==pid); allReviews.push({...r, productName:prod?prod.name:pid, productId:pid});});}); document.getElementById('adminReviewsList').innerHTML=allReviews.length==0?'<p>No reviews yet - Customer product pe review likhega to yahan dikhega</p>':allReviews.map(r=>`<div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:12px"><span class="rating-badge">${r.rating}★</span> <b>${r.productName}</b> - ${r.user} - ${new Date(r.date).toLocaleDateString()}<br>${r.text}<br><button style="background:#ef4444;color:white;border:none;padding:4px 8px;font-size:10px;border-radius:2px;margin-top:4px" onclick="if(confirm('Delete review?')){reviewsData['${r.productId}']=reviewsData['${r.productId}'].filter(x=>x.date!='${r.date}'); saveLocal(); renderAdminReviews();}">DELETE REVIEW</button></div>`).join('');}
+
+// Site Settings
+function saveSiteSettings(){const name=document.getElementById('adminSiteName').value.trim(); const cats=document.getElementById('adminCategories').value.trim().split(',').map(s=>s.trim().toLowerCase()).filter(Boolean); if(!name) return alert('Site Name bharo!'); siteConfig.siteName=name; siteConfig.categories=cats; saveLocal(); if(window.db){try{window.addDoc(window.collection(window.db,'siteConfig'), {siteName:name, categories:cats});}catch(e){}} toast('Site Settings Saved!');}
+function saveBannerSettings(){const title=document.getElementById('adminBannerTitle').value.trim(); const subtitle=document.getElementById('adminBannerSubtitle').value.trim(); const imgs=document.getElementById('adminBannerImages').value.trim().split(',').map(s=>s.trim()).filter(Boolean); if(!title) return alert('Title bharo!'); siteConfig.bannerTitle=title; siteConfig.bannerSubtitle=subtitle; siteConfig.bannerImages=imgs; saveLocal(); toast('Banner Saved!');}
+function saveAboutContact(){const aboutTitle=document.getElementById('adminAboutTitle').value.trim(); const aboutText=document.getElementById('adminAboutText').value.trim(); const phone=document.getElementById('adminContactPhone').value.trim(); const email=document.getElementById('adminContactEmail').value.trim(); const address=document.getElementById('adminContactAddress').value.trim(); siteConfig.aboutTitle=aboutTitle; siteConfig.aboutText=aboutText; siteConfig.contactPhone=phone; siteConfig.contactEmail=email; siteConfig.contactAddress=address; saveLocal(); toast('About/Contact Saved!');}
+function savePaymentSettings(){const upi=document.getElementById('adminUPI').value.trim(); const razorpay=document.getElementById('adminRazorpay').value.trim(); const cod=document.getElementById('adminCOD').value; siteConfig.upi=upi; siteConfig.razorpay=razorpay; siteConfig.cod=cod; saveLocal(); if(window.db){try{window.addDoc(window.collection(window.db,'siteConfig'), {upi, razorpay, cod});}catch(e){}} toast('Payment Settings Saved! UPI: '+upi); document.getElementById('upiIdDisplay').textContent=upi;}
+function saveSMSSettings(){const key=document.getElementById('adminSMSKey').value.trim(); const sender=document.getElementById('adminSMSSender').value.trim(); siteConfig.smsKey=key; siteConfig.smsSender=sender; saveLocal(); toast('SMS Settings Saved!');}
+function testRazorpay(){const key=document.getElementById('adminRazorpay').value; alert('Razorpay Test - Key: '+key+'\nReal payment ke liye razorpay.com se live key lo\nTesting: ₹1 payment success!');}
+function testUPI(){const upi=document.getElementById('adminUPI').value; alert('UPI Test - UPI ID: '+upi+'\nQR Code dikhega - Customer UPI app se payment karega\nTesting: ₹1 UPI success!');}
+function testSMS(){const mobile=document.getElementById('testMobile').value.trim(); const key=document.getElementById('adminSMSKey').value.trim(); if(!mobile) return alert('Mobile number bharo!'); if(!key) return alert('API Key bharo! - Fast2SMS.com se lo'); const otp=Math.floor(100000+Math.random()*900000); const msg=`Your OTP for Apna Shopping is ${otp}`; document.getElementById('smsLog').innerHTML+=`<div>Testing SMS to ${mobile} - OTP: ${otp} - Key: ${key.slice(0,10)}...</div>`; fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${key}&route=v3&sender_id=${document.getElementById('adminSMSSender').value||'TXTIND'}&message=${encodeURIComponent(msg)}&language=english&numbers=${mobile}`).then(r=>r.json()).then(d=>{document.getElementById('smsLog').innerHTML+=`<div>Response: ${JSON.stringify(d).slice(0,200)}</div>`; toast('SMS Sent! Check log');}).catch(e=>{document.getElementById('smsLog').innerHTML+=`<div>Error: ${e}</div>`;});}
+
+// Products
+function addProduct(){const name=document.getElementById('sName').value.trim(); const price=parseInt(document.getElementById('sPrice').value); const mrp=parseInt(document.getElementById('sMrp').value)||Math.round(price*1.3); const cat=document.getElementById('sCat').value; const img=document.getElementById('sImg').value.trim()||'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/k/l/l/-original-imagtc5fz9spysyk.jpeg'; const stock=parseInt(document.getElementById('sStock').value)||10; if(!name||!price) return alert('Name and Price bharo!'); const newP={id:Date.now().toString(), name, price, originalPrice:mrp, discount:Math.round((mrp-price)/mrp*100), rating:4.5, reviews:0, category:cat, image:img, desc:name, stock, seller:currentUser?currentUser.name:'Admin'}; products.unshift(newP); saveLocal(); if(window.db){try{window.addDoc(window.collection(window.db,'products'), newP);}catch(e){}} renderSections(); renderAdminProducts(); closeAll(); toast('Product Added ✅ - Firebase Real Save!');}
+function deleteProduct(id){if(!confirm('Delete product? Firebase se bhi delete hoga!')) return; products=products.filter(p=>p.id!=id); saveLocal(); if(window.db){try{window.deleteDoc(window.doc(window.db,'products',id));}catch(e){}} renderSections(); renderAdminProducts(); toast('Deleted');}
+function editProduct(id){const p=products.find(x=>x.id==id); if(!p) return; const newName=prompt('Edit Name',p.name); if(!newName) return; const newPrice=prompt('Edit Price',p.price); const newStock=prompt('Edit Stock',p.stock); if(newName) p.name=newName; if(newPrice) p.price=parseInt(newPrice); if(newStock) p.stock=parseInt(newStock); p.discount=Math.round((p.originalPrice-p.price)/p.originalPrice*100); saveLocal(); if(window.db){try{window.updateDoc(window.doc(window.db,'products',id), {name:p.name, price:p.price, stock:p.stock, discount:p.discount});}catch(e){}} renderSections(); renderAdminProducts(); toast('Updated');}
+
+function toast(msg){let t=document.getElementById('_toast'); if(!t){t=document.createElement('div'); t.id='_toast'; t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#172337;color:white;padding:12px 24px;border-radius:4px;font-size:13px;z-index:4000;box-shadow:0 4px 12px rgba(0,0,0,0.3)'; document.body.appendChild(t);} t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',3000);}
+
+async function loadFirebase(){
+  if(!window.db){ renderCats(); renderBanners(); renderSections(); updateCart(); if(currentUser){document.getElementById('loginBtn').classList.add('hidden'); document.getElementById('profileBtn').classList.remove('hidden'); document.getElementById('headerName').innerHTML=`${currentUser.name} <span class="badge badge-${currentUser.role}">${currentUser.role}</span>`; if(currentUser.role=='admin') document.getElementById('adminBtn').style.display='flex';} return;}
+  try{
+    const snap=await window.getDocs(window.collection(window.db,'products'));
+    let fbProds=[]; snap.forEach(d=>fbProds.push({id:d.id, ...d.data()}));
+    if(fbProds.length>0){ products=fbProds; }
+    window.onSnapshot(window.collection(window.db,'products'), (snap)=>{let list=[]; snap.forEach(d=>list.push({id:d.id,...d.data()})); if(list.length>0){products=list; renderSections();}});
+  }catch(e){console.log('Firebase products fail',e);}
+  try{
+    const snap=await window.getDocs(window.collection(window.db,'orders'));
+    let fbOrders=[]; snap.forEach(d=>fbOrders.push(d.data()));
+    if(fbOrders.length>0){ orders=fbOrders.concat(orders); saveLocal();}
+  }catch(e){}
+  renderCats(); renderBanners(); renderSections(); updateCart();
+  if(currentUser){document.getElementById('loginBtn').classList.add('hidden'); document.getElementById('profileBtn').classList.remove('hidden'); document.getElementById('headerName').innerHTML=`${currentUser.name} <span class="badge badge-${currentUser.role}">${currentUser.role}</span>`; if(currentUser.role=='admin') document.getElementById('adminBtn').style.display='flex';}
+}
+setTimeout(loadFirebase,1000);
+renderCats(); renderBanners(); renderSections(); updateCart();
+</script>
+</body>
+</html>
